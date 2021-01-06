@@ -5,9 +5,10 @@ const apiUrl = 'http://localhost:51224/api';
 const getProductsFromDB = async (products) => await axios.get(apiUrl + '/mathang').then(response => response.data).then(
     (result)=>{
         products.push(...result.map(item => item));
-        console.log("fetching: ", products);
+        //console.log("fetching: ", products);
     },
     (error)=>{
+        alert('API for products connection failed, turn on server', error);
         console.log("Product get api error: ",error);
     }
 )

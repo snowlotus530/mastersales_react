@@ -24,7 +24,7 @@ export default class Modal extends Component {
                       <h5>Sản phẩm thêm vào giỏ hàng</h5>
                       <img src={img} className="img-fluid" alt="" />
                       <h5>{title}</h5>
-                      <h5 className="text-muted">Giá : {price}đ</h5>
+                      <h5 className="text-muted">Giá : {Number(price).toLocaleString()}đ</h5>
                       <Link to="/">
                         <ButtonContainer
                           onClick={() => {

@@ -31,15 +31,15 @@ export default class CartTotals extends Component {
                 </Link>
                 <h5>
                   <span className=""> Tạm tính :</span>{" "}
-                  <strong> {cartSubTotal}đ </strong>
+                  <strong> {Number(cartSubTotal).toLocaleString()}đ </strong>
                 </h5>
-                <h5>
-                  <span className=""> Phí ship: :</span>{" "}
-                  <strong> {cartTax}đ </strong>
+                <h5 className="">
+                  <span className=""> Phí ship :</span>{" "}
+                  <strong> {Number(cartTax).toLocaleString()}đ </strong>
                 </h5>
                 <h5>
                   <span className=""> Tổng cộng :</span>{" "}
-                  <strong> {cartTotal}đ </strong>
+                  <strong> {Number(cartTotal).toLocaleString()}đ </strong>
                 </h5>
                 {/* <PayPalButton
                   totalAmount={cartTotal}

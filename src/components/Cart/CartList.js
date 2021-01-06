@@ -4,6 +4,7 @@ export default class CartList extends Component {
   render() {
     const { value } = this.props;
     const { cart } = this.props.value;
+    console.log(cart)
     return (
       <div className="container-fluid">
         {cart.map(item => (
