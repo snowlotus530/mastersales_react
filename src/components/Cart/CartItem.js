@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 export default class CartItem extends Component {
   render() {
     const { id, title, img, price, total, count } = this.props.item;
@@ -7,19 +8,21 @@ export default class CartItem extends Component {
     return (
       <div className="row my-1 text-capitalize text-center">
         <div className="col-10 mx-auto col-lg-2">
-          <img
-            src={img}
-            style={{ width: "5rem", heigth: "5rem" }}
-            className="img-fluid"
-            alt=""
-          />
+          <Link to="/details">
+            <img
+              src={img}
+              style={{ width: "5rem", heigth: "5rem" }}
+              className="img-fluid"
+              alt=""
+            />
+          </Link>
         </div>
         <div className="col-10 mx-auto col-lg-2 ">
           <span className="d-lg-none">product :</span> {title}
         </div>
         <div className="col-10 mx-auto col-lg-2 ">
           <strong>
-            <span className="d-lg-none">Giá :</span> {price}đ
+            <span className="d-lg-none">Giá :</span> {Number(price).toLocaleString()}đ
           </strong>
         </div>
         <div className="col-10 mx-auto col-lg-2 my-2 my-lg-0 ">
@@ -52,7 +55,7 @@ export default class CartItem extends Component {
         </div>
 
         <div className="col-10 mx-auto col-lg-2 ">
-          <strong>Tổng giá trị : {total}đ </strong>
+          <strong>Tổng giá trị : {Number(total).toLocaleString()}đ </strong>
         </div>
       </div>
     );

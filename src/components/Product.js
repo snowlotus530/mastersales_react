@@ -4,8 +4,7 @@ import { Link } from "react-router-dom";
 import { ProductConsumer } from "../context";
 export default class Product extends Component {
   render() {
-    const { id, title, img, price, inCart } = this.props.product;
-    const random = 0 + Math.floor(Math.random() * 25);
+    const { id, title, img, price, inCart, discount } = this.props.product;
     return (
       <ProductWrapper className="col-9 mx-auto col-md-6 col-lg-3 my-3">
         <div className="card">
@@ -23,6 +22,7 @@ export default class Product extends Component {
                     className="cart-btn"
                     disabled={inCart ? true : false}
                     onClick={() => {
+                      console.log('you click');
                       value.addToCart(id);
                       value.openModal(id);
                     }}
@@ -49,20 +49,20 @@ export default class Product extends Component {
           </div>
           <div className="card-footer d-flex justify-content-between">
             <h5 className="text-red font-italic mb-0">
-              {price}
+              {Number(price.toFixed(0)).toLocaleString()}
               <span className="mr-1">đ</span>
             </h5>
-            {random !== 0 ? (
+            {discount !== 0 ? (
               <h6 className="text-lightdark font-italic mb-0 text-tiny">
                 <del>
-                  {Math.floor(price / (100 - random)) * 100}
+                  {Number(Math.floor(price / (100 - discount)) * 100).toLocaleString()}
                   <span className="mr-1">đ</span>
                 </del>
               </h6>
             ) : null}
-            {random > 5 ? (
+            {discount > 5 ? (
               <h6 className="text-bright bg-warning rounded-circle p-1 mb-0">
-                -{random}
+                -{discount}
                 <span className="mr-1">%</span>
               </h6>
             ) : null}

@@ -1,8 +1,20 @@
 import React, { Component } from "react";
-import { storeProducts, detailProduct } from "./data";
+import { detailProduct } from "./data";
 import axios from "axios";
-import { getProductsFromDB } from './api';
+import { getProductsFromDB } from "./api";
 const ProductContext = React.createContext();
+
+let storeProducts = [];
+
+const getProducts = async () => {
+  await getProductsFromDB(storeProducts);
+  storeProducts.forEach((product) => {
+    product = {
+      ...product,
+    };
+  });
+  console.log("after get", storeProducts);
+};
 
 class ProductProvider extends Component {
   state = {
@@ -15,24 +27,78 @@ class ProductProvider extends Component {
     cartTax: 0,
     cartTotal: 0,
   };
-  componentDidMount() {
-    this.setProducts();
+  async componentDidMount() {
+    if (JSON.parse(window.localStorage.getItem("products")) === null) {
+      window.localStorage.setItem("products", JSON.stringify([]));
+    }
+    if (JSON.parse(window.localStorage.getItem("cart")) === null) {
+      window.localStorage.setItem("cart", JSON.stringify([]));
+    }
+    if (JSON.parse(window.localStorage.getItem("detailProduct")) === null) {
+      window.localStorage.setItem("detailProduct", JSON.stringify([]));
+    }
+    if (JSON.parse(window.localStorage.getItem("cartSubTotal")) === null) {
+      window.localStorage.setItem("cartSubTotal", JSON.stringify(0));
+    }
+    if (JSON.parse(window.localStorage.getItem("cartTax")) === null) {
+      window.localStorage.setItem("cartTax", JSON.stringify(0));
+    }
+    if (JSON.parse(window.localStorage.getItem("cartTotal")) === null) {
+      window.localStorage.setItem("cartTotal", JSON.stringify(0));
+    }
+    this.state.products = JSON.parse(window.localStorage.getItem("products"));
+    this.state.cart = JSON.parse(window.localStorage.getItem("cart"));
+    this.state.detailProduct = JSON.parse(
+      window.localStorage.getItem("detailProduct")
+    );
+    this.state.cartSubTotal = JSON.parse(
+      window.localStorage.getItem("cartSubTotal")
+    );
+    this.state.cartTax = JSON.parse(window.localStorage.getItem("cartTax"));
+    this.state.cartTotal = JSON.parse(window.localStorage.getItem("cartTotal"));
+    try {
+      await getProducts();
+      console.log("abc first");
+      //console.log("before set ", storeProducts);
+      this.setProducts();
+      console.log("abc then");
+      //console.log("after set ", storeProducts);
+    } catch (error) {
+      alert("error fetching product data");
+    }
   }
 
   setProducts = async () => {
     let productsToShow = [];
-    let productsFromDB = [];
-    await getProductsFromDB(productsFromDB);
-    console.log("after get",productsFromDB);
+    //await getProductsFromDB(productsFromDB);
     storeProducts.forEach((item, index) => {
-      const product = productsFromDB[index];
-      const singleItem = { ...item, title: product.tenMh, img: product.hinhAnh, price: product.donGia };
+      const random = 0 + Math.floor(Math.random() * 25);
+      item.moTa =
+        "Lorem ipsum dolor amet offal butcher quinoa sustainable gastropub, echo park actually green juice sriracha paleo. Brooklyn sriracha semiotics, DIY coloring book mixtape craft beer sartorial hella blue bottle. Tote bag wolf authentic try-hard put a bird on it mumblecore. Unicorn lumbersexual master cleanse blog hella VHS, vaporware sartorial church-key cardigan single-origin coffee lo-fi organic asymmetrical. Taxidermy semiotics celiac stumptown scenester normcore, ethical helvetica photo booth gentrify.";
+      const product = item;
+      const singleItem = {
+        //...item,
+        id: product.id,
+        title: product.tenMh,
+        img: product.hinhAnh,
+        price: product.donGia,
+        company: product.maNccNavigation.tenNcc,
+        inCart: false,
+        count: 0,
+        total: 0,
+        info: product.moTa,
+        discount: random,
+      };
       productsToShow = [...productsToShow, singleItem];
-      console.log(productsToShow);
     });
+    if (JSON.parse(window.localStorage.getItem("products")).length === 0) {
+      console.log("local set");
+      window.localStorage.setItem("products", JSON.stringify(productsToShow));
+    }
     this.setState(() => {
-      return { products: productsToShow };
+      return { products: JSON.parse(window.localStorage.getItem("products")) };
     }, this.checkCartItems);
+    console.log("products ", this.state.products);
   };
 
   getItem = (id) => {
@@ -41,26 +107,43 @@ class ProductProvider extends Component {
   };
   handleDetail = (id) => {
     const product = this.getItem(id);
+    window.localStorage.setItem("detailProduct", JSON.stringify(product));
     this.setState(() => {
-      return { detailProduct: product };
+      return {
+        detailProduct: JSON.parse(window.localStorage.getItem("detailProduct")),
+      };
     });
   };
   addToCart = (id) => {
     let tempProducts = [...this.state.products];
     const index = tempProducts.indexOf(this.getItem(id));
     const product = tempProducts[index];
+    console.log("add product ", product);
     product.inCart = true;
     product.count = 1;
     const price = product.price;
     product.total = price;
 
+    window.localStorage.setItem("products", JSON.stringify([...tempProducts]));
+    window.localStorage.setItem(
+      "cart",
+      JSON.stringify([...this.state.cart, product])
+    );
+    window.localStorage.setItem(
+      "detailProduct",
+      JSON.stringify({ ...product })
+    );
+
     this.setState(() => {
+      //const currentCart = [...this.state.cart, product];
+      //window.localStorage.setItem('cart',JSON.stringify(currentCart));
       return {
-        products: [...tempProducts],
-        cart: [...this.state.cart, product],
-        detailProduct: { ...product },
+        products: JSON.parse(window.localStorage.getItem("products")),
+        cart: JSON.parse(window.localStorage.getItem("cart")),
+        detailProduct: JSON.parse(window.localStorage.getItem("detailProduct")),
       };
     }, this.addTotals);
+    //console.log(this.state.detailProduct)
   };
   openModal = (id) => {
     const product = this.getItem(id);
@@ -75,6 +158,7 @@ class ProductProvider extends Component {
   };
   increment = (id) => {
     let tempCart = [...this.state.cart];
+    console.log("items add", tempCart);
     const selectedProduct = tempCart.find((item) => {
       return item.id === id;
     });
@@ -82,9 +166,10 @@ class ProductProvider extends Component {
     const product = tempCart[index];
     product.count = product.count + 1;
     product.total = product.count * product.price;
+    window.localStorage.setItem("cart", JSON.stringify([...tempCart]));
     this.setState(() => {
       return {
-        cart: [...tempCart],
+        cart: JSON.parse(window.localStorage.getItem("cart")),
       };
     }, this.addTotals);
   };
@@ -100,8 +185,9 @@ class ProductProvider extends Component {
       this.removeItem(id);
     } else {
       product.total = product.count * product.price;
+      window.localStorage.setItem("cart", JSON.stringify([...tempCart]));
       this.setState(() => {
-        return { cart: [...tempCart] };
+        return { cart: JSON.parse(window.localStorage.getItem("cart")) };
       }, this.addTotals);
     }
   };
@@ -114,7 +200,7 @@ class ProductProvider extends Component {
     //   }, 0);
     let subTotal = 0;
     this.state.cart.map((item) => (subTotal += item.total));
-    const tempTax = subTotal * 0.1;
+    const tempTax = subTotal * 0.05;
     const tax = parseFloat(tempTax.toFixed(2));
     const total = subTotal + tax;
     return {
@@ -125,12 +211,18 @@ class ProductProvider extends Component {
   };
   addTotals = () => {
     const totals = this.getTotals();
+    window.localStorage.setItem(
+      "cartSubTotal",
+      JSON.stringify(totals.subTotal)
+    );
+    window.localStorage.setItem("cartTax", JSON.stringify(totals.tax));
+    window.localStorage.setItem("cartTotal", JSON.stringify(totals.total));
     this.setState(
       () => {
         return {
-          cartSubTotal: totals.subTotal,
-          cartTax: totals.tax,
-          cartTotal: totals.total,
+          cartSubTotal: JSON.parse(window.localStorage.getItem("cartSubTotal")),
+          cartTax: JSON.parse(window.localStorage.getItem("cartTax")),
+          cartTotal: JSON.parse(window.localStorage.getItem("cartTotal")),
         };
       },
       () => {
@@ -152,20 +244,35 @@ class ProductProvider extends Component {
       return item.id !== id;
     });
 
+    window.localStorage.setItem("products", JSON.stringify([...tempProducts]));
+    window.localStorage.setItem("cart", JSON.stringify([...tempCart]));
+
     this.setState(() => {
       return {
-        cart: [...tempCart],
-        products: [...tempProducts],
+        cart: JSON.parse(window.localStorage.getItem("cart")),
+        products: JSON.parse(window.localStorage.getItem("products")),
       };
     }, this.addTotals);
   };
+  resetProducts = () => {
+    this.state.products.forEach((product) => {
+      product.inCart = false;
+      product.count = 0;
+      product.total = 0;
+    });
+    window.localStorage.setItem("products", JSON.stringify([...this.state.products]));
+  };
   clearCart = () => {
+    this.resetProducts();
+    window.localStorage.setItem("cart", JSON.stringify([]));
     this.setState(
       () => {
-        return { cart: [] };
+        return { cart: JSON.parse(window.localStorage.getItem("cart")) };
       },
       () => {
-        this.setProducts();
+        this.resetProducts();
+        console.log("products reset: ", this.state.products);
+        //this.setProducts();
         this.addTotals();
       }
     );
