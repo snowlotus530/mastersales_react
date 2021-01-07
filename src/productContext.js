@@ -323,6 +323,8 @@ class ProductProvider extends Component {
       console.log("detail : ", orderDetail);
       await postOrderDetailToDB(orderDetail);
     });
+    await this.clearCart();
+    
   };
   render() {
     return (

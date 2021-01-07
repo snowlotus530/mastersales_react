@@ -57,7 +57,7 @@ const postOrderDetailToDB = async (orderDetail) =>
     //alert(result.data);
   });
 
-const geUsersFromDB = async (user) =>
+const getUsersFromDB = async (user) =>
   await axios
     .get(apiUrl + "/khachhang")
     .then((response) => response.data)
@@ -72,12 +72,23 @@ const geUsersFromDB = async (user) =>
       }
     );
 
+const loginDB = async (user) =>
+  await axios.post(apiUrl + "/khachhang/login", user).then((result) => {
+    //alert(JSON.stringify(result.data));
+    return result.data;
+  }, (error) => {
+      //alert('no find user');
+      return null;
+  });
+
 export {
   getProductsFromDB,
   getOrdersFromDB,
   getOrderDetailsFromDB,
   postOrderToDB,
   postOrderDetailToDB,
+  getUsersFromDB,
+  loginDB
 };
 
 // fetch("http://localhost:51224/api/mathang")

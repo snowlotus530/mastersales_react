@@ -2,9 +2,12 @@ import React, { Component } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { ProductConsumer } from "../productContext";
-export default class Product extends Component {
-  render() {
-    const { id, title, img, price, inCart, discount } = this.props.product;
+
+import { useToasts } from "react-toast-notifications";
+export default function Product (props){
+  // render() {
+    const { id, title, img, price, inCart, discount } = props.product;
+    const { addToast } = useToasts();
     return (
       <ProductWrapper className="col-9 mx-auto col-md-6 col-lg-3 my-3">
         <div className="card">
@@ -25,6 +28,7 @@ export default class Product extends Component {
                       console.log('you click');
                       value.addToCart(id);
                       value.openModal(id);
+                      addToast(`Thêm vào giỏ hàng ${title} thành công`, { appearance: "success" });
                     }}
                   >
                     {inCart ? (
@@ -70,7 +74,7 @@ export default class Product extends Component {
         </div>
       </ProductWrapper>
     );
-  }
+  // }
 }
 
 const ProductWrapper = styled.div`
