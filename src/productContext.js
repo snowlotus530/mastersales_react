@@ -1,7 +1,13 @@
 import React, { Component } from "react";
 import { detailProduct } from "./data";
 import axios from "axios";
-import { getProductsFromDB } from "./api";
+import {
+  getProductsFromDB,
+  getOrdersFromDB,
+  postOrderToDB,
+  postOrderDetailToDB,
+} from "./api";
+import { autoGenerateOrder, autoGenerateOrderDetail } from "./helpers";
 const ProductContext = React.createContext();
 
 let storeProducts = [];
@@ -260,7 +266,10 @@ class ProductProvider extends Component {
       product.count = 0;
       product.total = 0;
     });
-    window.localStorage.setItem("products", JSON.stringify([...this.state.products]));
+    window.localStorage.setItem(
+      "products",
+      JSON.stringify([...this.state.products])
+    );
   };
   clearCart = () => {
     this.resetProducts();
@@ -277,6 +286,44 @@ class ProductProvider extends Component {
       }
     );
   };
+
+  orderCart = async () => {
+    let newIdOrder;
+    await autoGenerateOrder().then((result) => (newIdOrder = result));
+    const order = {
+      id: newIdOrder,
+      maKH: "KH" + 1, // get khach hang
+      ngayDat: new Date()
+        .toISOString()
+        .slice(0, 19)
+        .replace("T", " "),
+      thanhTien: this.state.cartTotal,
+      trangThai: 0,
+      isDeleted: false,
+      // maKhNavigation: null,
+      // ctPhieudathangs: [],
+      // hoadons: [],
+    };
+    console.log("get order ", order);
+    await postOrderToDB(order);
+    let newIdOrderdetail;
+    await autoGenerateOrderDetail().then((result) => (newIdOrderdetail = result));
+    this.state.cart.forEach(async (product, index) => {
+      const orderDetail = {
+        id: "CTPDH" + (parseInt(newIdOrderdetail) + index).toString(),
+        maPhieuDh: newIdOrder,
+        maMh: product.id,
+        sldat: product.count,
+        donGia: product.price,
+        tongTien: product.total,
+        isDeleted: false,
+        //maMhNavigation: null,
+        //maPhieuDhNavigation: null,
+      };
+      console.log("detail : ", orderDetail);
+      await postOrderDetailToDB(orderDetail);
+    });
+  };
   render() {
     return (
       <ProductContext.Provider
@@ -290,6 +337,7 @@ class ProductProvider extends Component {
           decrement: this.decrement,
           removeItem: this.removeItem,
           clearCart: this.clearCart,
+          orderCart: this.orderCart,
         }}
       >
         {this.props.children}

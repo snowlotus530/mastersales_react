@@ -18,6 +18,7 @@ body {
   letter-spacing: 0.1rem;
   text-transform: uppercase;
   line-height: 2rem;
+  text-shadow: 1px 2px;
 }
 .text-tiny{
   font-size: 0.9rem;
@@ -39,6 +40,9 @@ body {
 }
 .navbar {
   justify-content: flex-start !important;
+}
+.linear-gradient{
+  background-image: linear-gradient(to right, var(--mainBlue), var(--lightDark)) !important;
 }
 .btn-black {
   background: transparent;

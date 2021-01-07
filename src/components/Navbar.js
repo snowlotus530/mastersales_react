@@ -6,7 +6,7 @@ import { ButtonContainer } from "./Button";
 export default class Navbar extends Component {
   render() {
     return (
-      <Nav className="navbar navbar-expand-sm  navbar-dark px-sm-5">
+      <Nav className="navbar navbar-expand-sm  navbar-dark linear-gradient px-sm-5">
         <Link to="/">
           <img height={45} src={logo} alt="store" className="navbar-brand" />
         </Link>
@@ -30,6 +30,14 @@ export default class Navbar extends Component {
             </Link>
           </li>
         </ul>
+        <Link to="/login" className="ml-auto">
+          <ButtonContainer>
+            <span className="mr-2">
+              <i className="fas fa-key" />
+            </span>
+            Đăng nhập
+          </ButtonContainer>
+        </Link>
         <Link to="/cart" className="ml-auto">
           <ButtonContainer>
             <span className="mr-2">

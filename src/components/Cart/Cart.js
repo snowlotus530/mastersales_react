@@ -3,7 +3,7 @@ import Title from "../Title";
 import CartColumns from "./CartColumns";
 import CartList from "./CartList";
 import CartTotals from "./CartTotals";
-import { ProductConsumer } from "../../context";
+import { ProductConsumer } from "../../productContext";
 import EmptyCart from "./EmptyCart";
 export default class Store extends Component {
   render() {
