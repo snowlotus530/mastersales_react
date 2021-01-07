@@ -55,7 +55,7 @@ export default class CartItem extends Component {
         </div>
 
         <div className="col-10 mx-auto col-lg-2 ">
-          <strong>Tổng giá trị : {Number(total).toLocaleString()}đ </strong>
+          <strong>{Number(total).toLocaleString()}đ </strong>
         </div>
       </div>
     );

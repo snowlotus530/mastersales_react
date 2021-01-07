@@ -8,7 +8,8 @@ export default class CartTotals extends Component {
       cartTax,
       cartTotal,
       cart,
-      clearCart
+      clearCart,
+      orderCart,
     } = this.props.value;
     const { history } = this.props;
     const emptyCart = cart.length === 0 ? true : false;
@@ -18,7 +19,7 @@ export default class CartTotals extends Component {
           <div className="container">
             <div className="row">
               <div className="col-10 mt-2 ml-sm-5 ml-md-auto col-sm-8 text-capitalize text-right">
-                <Link to="/">
+                <Link to="/cart">
                   <button
                     className="btn btn-outline-danger text-uppercase mb-3 px-5"
                     type="button"
@@ -26,7 +27,7 @@ export default class CartTotals extends Component {
                       clearCart();
                     }}
                   >
-                    clear cart
+                    Xóa toàn bộ
                   </button>
                 </Link>
                 <h5>
@@ -34,13 +35,26 @@ export default class CartTotals extends Component {
                   <strong> {Number(cartSubTotal).toLocaleString()}đ </strong>
                 </h5>
                 <h5 className="">
-                  <span className=""> Phí ship :</span>{" "}
+                  <span className=""> Phí vận chuyển :</span>{" "}
                   <strong> {Number(cartTax).toLocaleString()}đ </strong>
                 </h5>
                 <h5>
                   <span className=""> Tổng cộng :</span>{" "}
                   <strong> {Number(cartTotal).toLocaleString()}đ </strong>
                 </h5>
+                <br />
+                <Link to="/cart">
+                  <button
+                    className="btn btn-outline-primary text-uppercase mb-3 px-5"
+                    type="button"
+                    onClick={() => {
+                      // dat hang o day
+                      orderCart();
+                    }}
+                  >
+                    Đặt hàng
+                  </button>
+                </Link>
                 {/* <PayPalButton
                   totalAmount={cartTotal}
                   clearCart={clearCart}

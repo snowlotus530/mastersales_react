@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { ProductConsumer } from "../context";
+import { ProductConsumer } from "../productContext";
 export default class Product extends Component {
   render() {
     const { id, title, img, price, inCart, discount } = this.props.product;
@@ -40,10 +40,10 @@ export default class Product extends Component {
             }}
           </ProductConsumer>
           <div className="card-footer d-flex justify-content-between">
-            <p className="align-self-center mb-0">{title}</p>
-            {/* {random > 0 && random < 5 ? (
+            {/* <p className="align-self-center mb-0">{title}</p>
+            {discount > 0 && discount < 5 ? (
               <p className="text-yellow bg-dark rounded p-1">NEW</p>
-            ) : random > 20 ? (
+            ) : discount > 20 ? (
               <p className="text-yellow bg-dark rounded p-1">HOT</p>
             ) : null} */}
           </div>
