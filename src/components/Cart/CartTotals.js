@@ -1,8 +1,11 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 import PayPalButton from "./PayPalButton";
 import { Link } from "react-router-dom";
-export default class CartTotals extends Component {
-  render() {
+import { useToasts } from "react-toast-notifications";
+import ConfirmDialog from '../ConfirmBox'
+
+export default function CartTotals (props){
+  // render() {
     const {
       cartSubTotal,
       cartTax,
@@ -10,9 +13,11 @@ export default class CartTotals extends Component {
       cart,
       clearCart,
       orderCart,
-    } = this.props.value;
-    const { history } = this.props;
+    } = props.value;
+    const { history } = props;
     const emptyCart = cart.length === 0 ? true : false;
+    const { addToast } = useToasts();
+    const [dialogOpen,setDialogOpen] = useState(false);
     return (
       <React.Fragment>
         {!emptyCart && (
@@ -24,11 +29,14 @@ export default class CartTotals extends Component {
                     className="btn btn-outline-danger text-uppercase mb-3 px-5"
                     type="button"
                     onClick={() => {
+                      setDialogOpen(true);
                       clearCart();
+                      addToast(`Xóa toàn bộ giỏ thành công`, { appearance: "success" });
                     }}
                   >
                     Xóa toàn bộ
                   </button>
+                  <ConfirmDialog open={dialogOpen} />
                 </Link>
                 <h5>
                   <span className=""> Tạm tính :</span>{" "}
@@ -50,6 +58,7 @@ export default class CartTotals extends Component {
                     onClick={() => {
                       // dat hang o day
                       orderCart();
+                      addToast(`Đặt hàng thành công`, { appearance: "success" });
                     }}
                   >
                     Đặt hàng
@@ -66,5 +75,5 @@ export default class CartTotals extends Component {
         )}
       </React.Fragment>
     );
-  }
+  // }
 }

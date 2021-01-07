@@ -3,11 +3,12 @@ import styled from "styled-components";
 import { ProductConsumer } from "../productContext";
 import { ButtonContainer } from "./Button";
 import { Link } from "react-router-dom";
+import { Button } from "bootstrap";
 export default class Modal extends Component {
   render() {
     return (
       <ProductConsumer>
-        {value => {
+        {(value) => {
           const { modalOpen, closeModal } = value;
           const { img, title, price } = value.modalProduct;
           if (!modalOpen) {
@@ -24,7 +25,9 @@ export default class Modal extends Component {
                       <h5>Sản phẩm thêm vào giỏ hàng</h5>
                       <img src={img} className="img-fluid" alt="" />
                       <h5>{title}</h5>
-                      <h5 className="text-muted">Giá : {Number(price).toLocaleString()}đ</h5>
+                      <h5 className="text-muted">
+                        Giá : {Number(price).toLocaleString()}đ
+                      </h5>
                       <Link to="/">
                         <ButtonContainer
                           onClick={() => {
@@ -44,6 +47,14 @@ export default class Modal extends Component {
                           Đến giỏ hàng
                         </ButtonContainer>
                       </Link>
+                      <ButtonContainer
+                        close
+                        onClick={() => {
+                          closeModal();
+                        }}
+                      >
+                        Đóng
+                      </ButtonContainer>
                     </div>
                   </div>
                 </div>

@@ -5,11 +5,18 @@ import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import { BrowserRouter as Router } from "react-router-dom";
 import { ProductProvider } from "./productContext";
+import { UserProvider } from "./userContext";
+import { ToastProvider } from "react-toast-notifications";
+
 ReactDOM.render(
   <ProductProvider>
-    <Router>
-      <App />
-    </Router>
+    <UserProvider>
+      <ToastProvider autoDismiss={true}>
+        <Router>
+          <App />
+        </Router>
+      </ToastProvider>
+    </UserProvider>
   </ProductProvider>,
   document.getElementById("root")
 );

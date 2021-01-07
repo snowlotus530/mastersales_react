@@ -3,52 +3,79 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import logo from "../logo.png";
 import { ButtonContainer } from "./Button";
-export default class Navbar extends Component {
-  render() {
-    return (
-      <Nav className="navbar navbar-expand-sm  navbar-dark linear-gradient px-sm-5">
-        <Link to="/">
-          <img height={45} src={logo} alt="store" className="navbar-brand" />
-        </Link>
-        <ul className="navbar-nav align-items-center">
-          <li className="nav-item ml-5">
-            <Link to="/" className="nav-link">
-              <span>
-                <i className="fas fa-home" />
-              </span>
-              <span> </span>
-              Trang chủ
+import { UserConsumer } from "../userContext";
+export default function Navbar() {
+  // render() {
+  return (
+    <UserConsumer>
+      {(value) => {
+        console.log("log in ", value.loggedIn);
+        const logOut = () => {
+          value.logOut();
+        };
+        return (
+          <Nav className="navbar navbar-expand-sm  navbar-dark linear-gradient px-sm-5">
+            <Link to="/">
+              <img
+                height={45}
+                src={logo}
+                alt="store"
+                className="navbar-brand"
+              />
             </Link>
-          </li>
-          <li className="nav-item ml-5">
-            <Link to="/user" className="nav-link">
-              <span>
-                <i className="fas fa-user" />
-              </span>
-              <span> </span>
-              Người dùng
+            <ul className="navbar-nav align-items-center">
+              <li className="nav-item ml-5">
+                <Link to="/" className="nav-link">
+                  <span>
+                    <i className="fas fa-home" />
+                  </span>
+                  <span> </span>
+                  Trang chủ
+                </Link>
+              </li>
+              <li className="nav-item ml-5">
+                <Link to="/user" className="nav-link">
+                  <span>
+                    <i className="fas fa-user" />
+                  </span>
+                  <span> </span>
+                  Người dùng
+                </Link>
+              </li>
+            </ul>
+            <Link to="/cart" className="ml-auto">
+              <ButtonContainer>
+                <span className="mr-2">
+                  <i className="fas fa-cart-plus " />
+                </span>
+                Giỏ hàng
+              </ButtonContainer>
             </Link>
-          </li>
-        </ul>
-        <Link to="/login" className="ml-auto">
-          <ButtonContainer>
-            <span className="mr-2">
-              <i className="fas fa-key" />
-            </span>
-            Đăng nhập
-          </ButtonContainer>
-        </Link>
-        <Link to="/cart" className="ml-auto">
-          <ButtonContainer>
-            <span className="mr-2">
-              <i className="fas fa-cart-plus " />
-            </span>
-            Giỏ hàng
-          </ButtonContainer>
-        </Link>
-      </Nav>
-    );
-  }
+            {value.loggedIn !== true ? (
+              <Link to="/login" className="ml-auto">
+                <ButtonContainer>
+                  <span className="mr-2">
+                    <i className="fas fa-key" />
+                  </span>
+                  Đăng nhập
+                </ButtonContainer>
+              </Link>
+            ) : (
+              <Link to="/" className="ml-auto">
+                <ButtonContainer onClick={logOut}>
+                  <span className="mr-2">
+                    <i className="fas fa-sign-out-alt" />
+                  </span>
+                  Đăng xuất
+                </ButtonContainer>
+              </Link>
+            )}
+          </Nav>
+        );
+      }}
+    </UserConsumer>
+  );
+  // }
 }
 
 const Nav = styled.nav`

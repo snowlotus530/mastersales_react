@@ -15,7 +15,7 @@ export default class ProductList extends Component {
           <div className="container">
             <Title name="Hot" title="sales" />
             <div className="row">
-            {                  console.log('product list')}
+            {  console.log('product list')}
               <ProductConsumer>
                 {value => {
                   console.log('product list inside')
