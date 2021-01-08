@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
+import FormHelperText from "@material-ui/core/FormHelperText";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
@@ -13,7 +14,9 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import useForm from "../../useForm";
+import { postUserToDB } from "../../api";
 import { useToasts } from "react-toast-notifications";
+import { autoGenerateUser } from "../../helpers";
 import { UserConsumer } from "../../userContext";
 
 function Copyright() {
@@ -31,7 +34,7 @@ function Copyright() {
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(8),
+    marginTop: theme.spacing(6),
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -62,18 +65,22 @@ export default function SignUp(props) {
 
   const { addToast } = useToasts();
 
+  const [agree, setAgree] = useState(false);
+
   const validate = (fieldValues = values) => {
     let temp = { ...errors };
     if ("fullname" in fieldValues)
-      temp.fullname = fieldValues.fullname ? "" : "Bạn chưa nhập họ tên";
+      temp.fullname = fieldValues.fullname ? "" : "Hãy nhập họ tên";
     if ("username" in fieldValues)
-      temp.username = fieldValues.username ? "" : "Bạn chưa nhập tên đăng nhập";
+      temp.username = fieldValues.username ? "" : "Hãy nhập tên đăng nhập";
     if ("password" in fieldValues)
-      temp.password = fieldValues.password ? "" : "Bạn chưa nhập mật khẩu";
+      temp.password = fieldValues.password ? "" : "Hãy nhập mật khẩu";
     if ("address" in fieldValues)
-      temp.address = fieldValues.address ? "" : "Bạn chưa nhập địa chỉ";
+      temp.address = fieldValues.address ? "" : "Hãy nhập địa chỉ";
     if ("phone" in fieldValues)
-      temp.phone = fieldValues.phone ? "" : "Bạn chưa nhập số điện thoại";
+      temp.phone = fieldValues.phone ? "" : "Hãy nhập số điện thoại";
+    // if ("agree" in fieldValues)
+    temp.agree = agree === true ? "" : "Bạn chưa đồng ý với điều khoản";
     setErrors({
       ...temp,
     });
@@ -93,26 +100,31 @@ export default function SignUp(props) {
   const handleSubmit = async (e, value) => {
     e.preventDefault();
     if (validate()) {
+      let newIdUser;
+      await autoGenerateUser().then((result) => (newIdUser = result));
       const user = {
-        id: 1,
+        id: newIdUser,
         tenDangNhap: values.username,
         matKhau: values.password,
         tenKh: values.fullname,
         diaChi: values.address,
         sdt: values.phone,
+        avatar: null,
+        isDeleted: 0,
       };
-      //const signupRes = await signupDB(user);
-      // if (signupRes !== null) {
-      //   value.login(signupRes);
-      //   addToast("Đăng kí tài khoản Master Sales thành công", {
-      //     appearance: "success",
-      //   });
+      const signupRes = await postUserToDB(user);
+      //alert(JSON.stringify(signupRes));
+      if (signupRes !== null) {
+        value.logIn(signupRes);
+        addToast("Đăng kí tài khoản Master Sales thành công", {
+          appearance: "success",
+        });
       //   //props.history.push("/");
-      // } else {
-      //   addToast("Tài khoản không thể đăng kí, cùng thử lại nhé", {
-      //     appearance: "warning",
-      //   });
-      // }
+      } else {
+        addToast("Có lỗi xảy ra khi đăng kí tài khoản với tên đăng nhập đã có, cùng thử lại nhé", {
+          appearance: "warning",
+        });
+      }
     }
   };
 
@@ -123,64 +135,129 @@ export default function SignUp(props) {
           <Container component="main" maxWidth="xs">
             <CssBaseline />
             <div className={classes.paper}>
-              <Avatar className={classes.avatar}>
+              {/* <Avatar className={classes.avatar}>
                 <LockOutlinedIcon />
-              </Avatar>
-              <form className={classes.form} noValidate onSubmit={(e) => handleSubmit(e,value)}>
+              </Avatar> */}
+              <form
+                className={classes.form}
+                noValidate
+                onSubmit={(e) => handleSubmit(e, value)}
+              >
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={6}>
                     <TextField
-                      autoComplete="fname"
-                      name="firstName"
                       variant="outlined"
+                      //margin="normal"
                       required
                       fullWidth
-                      id="firstName"
-                      label="First Name"
+                      id="username"
+                      label="Tên đăng nhập"
+                      name="username"
+                      autoComplete="off"
                       autoFocus
+                      value={values.username}
+                      onChange={handleInputChange}
+                      {...(errors.username && {
+                        error: true,
+                        helperText: errors.username,
+                      })}
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>
                     <TextField
                       variant="outlined"
-                      required
-                      fullWidth
-                      id="lastName"
-                      label="Last Name"
-                      name="lastName"
-                      autoComplete="lname"
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      variant="outlined"
-                      required
-                      fullWidth
-                      id="email"
-                      label="Email Address"
-                      name="email"
-                      autoComplete="email"
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      variant="outlined"
+                      //margin="normal"
                       required
                       fullWidth
                       name="password"
-                      label="Password"
+                      label="Mật khẩu"
                       type="password"
                       id="password"
                       autoComplete="current-password"
+                      value={values.password}
+                      onChange={handleInputChange}
+                      {...(errors.password && {
+                        error: true,
+                        helperText: errors.password,
+                      })}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      variant="outlined"
+                      //margin="normal"
+                      required
+                      fullWidth
+                      id="fullname"
+                      label="Họ tên"
+                      name="fullname"
+                      autoComplete="off"
+                      autoFocus
+                      value={values.fullname}
+                      onChange={handleInputChange}
+                      {...(errors.fullname && {
+                        error: true,
+                        helperText: errors.fullname,
+                      })}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      variant="outlined"
+                      //margin="normal"
+                      required
+                      fullWidth
+                      id="address"
+                      label="Địa chỉ"
+                      name="address"
+                      autoComplete="off"
+                      autoFocus
+                      value={values.address}
+                      onChange={handleInputChange}
+                      {...(errors.address && {
+                        error: true,
+                        helperText: errors.address,
+                      })}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      variant="outlined"
+                      //margin="normal"
+                      required
+                      fullWidth
+                      id="phone"
+                      label="Số điện thoại"
+                      name="phone"
+                      autoComplete="off"
+                      autoFocus
+                      value={values.phone}
+                      onChange={handleInputChange}
+                      {...(errors.phone && {
+                        error: true,
+                        helperText: errors.phone,
+                      })}
                     />
                   </Grid>
                   <Grid item xs={12}>
                     <FormControlLabel
                       control={
-                        <Checkbox value="allowExtraEmails" color="primary" />
+                        <Checkbox
+                          value=""
+                          onClick={() => {
+                            setAgree(!agree);
+                            console.log("option", agree);
+                          }}
+                          color="primary"
+                        />
                       }
-                      label="I want to receive inspiration, marketing promotions and updates via email."
+                      label="Tôi đồng ý với những điều khoản và dịch vụ"
                     />
+                    {errors.agree && (
+                      <FormHelperText style={{ color: "red" }}>
+                        {errors.agree}
+                      </FormHelperText>
+                    )}
                   </Grid>
                 </Grid>
                 <Button

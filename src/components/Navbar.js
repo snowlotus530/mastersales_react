@@ -13,7 +13,7 @@ export default function Navbar() {
   return (
     <UserConsumer>
       {(value) => {
-        console.log("log in ", value.loggedIn);
+        //console.log("log in ", value.loggedIn);
         const logOut = () => {
           value.logOut();
         };
@@ -65,7 +65,7 @@ export default function Navbar() {
                 </ButtonContainer>
               </Link>
             ) : (
-              <Link to="/" className="ml-auto">
+              <div className="ml-auto">
                 <ButtonContainer
                   onClick={() => childRefLog.current.handleClickOpen()}
                 >
@@ -84,7 +84,7 @@ export default function Navbar() {
                     });
                   }}
                 />
-              </Link>
+              </div>
             )}
           </Nav>
         );

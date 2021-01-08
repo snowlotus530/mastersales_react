@@ -290,9 +290,10 @@ class ProductProvider extends Component {
   orderCart = async () => {
     let newIdOrder;
     await autoGenerateOrder().then((result) => (newIdOrder = result));
+    let userId = JSON.parse(window.localStorage.getItem('user')).id;
     const order = {
       id: newIdOrder,
-      maKH: "KH" + 1, // get khach hang
+      maKH: userId,
       ngayDat: new Date()
         .toISOString()
         .slice(0, 19)
