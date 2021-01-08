@@ -20,7 +20,7 @@ import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import { mainListItems, secondaryListItems } from "./listItems";
 // import Chart from './Chart';
-import Deposits from "./Deposits";
+import Order from "./Order";
 import Orders from "./Orders";
 import { UserConsumer } from "../../userContext";
 
@@ -177,7 +177,7 @@ export default function Dashboard() {
                 <Chart />
               </Paper>
             </Grid> */}
-            {/* Recent Deposits */}
+            {/* Recent Order */}
 
             <UserConsumer>
               {(value) => {
@@ -191,7 +191,7 @@ export default function Dashboard() {
                   return (
                     <Grid item xs={12} md={4} lg={3}>
                       <Paper className={fixedHeightPaper}>
-                        <Deposits key={order.id} order={order} />
+                        <Order key={order.id} order={order} />
                       </Paper>
                     </Grid>
                   );

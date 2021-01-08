@@ -11,12 +11,12 @@ function preventDefault(event) {
 }
 
 const useStyles = makeStyles({
-  depositContext: {
+  orderContext: {
     flex: 1,
   },
 });
 
-export default function Deposits(props) {
+export default function Order(props) {
   const classes = useStyles();
   return (
     <React.Fragment>
@@ -26,11 +26,11 @@ export default function Deposits(props) {
       <Typography component="p" variant="h4">
         {Number(props.order.thanhTien).toLocaleString()}đ
       </Typography>
-      <Typography color="textSecondary" className={classes.depositContext}>
+      <Typography color="textSecondary" className={classes.orderContext}>
         {/* {props.order.ngayDat.slice(0,10).split('-').join('/')} */}
         {moment(props.order.ngayDat).format("DD/MM/YYYY, h:mm:ss a")}
       </Typography>
-      <Typography color="textSecondary" className={classes.depositContext}>
+      <Typography color="textSecondary" className={classes.orderContext}>
         {moment(props.order.ngayDat).startOf('hour').fromNow()}
       </Typography>
       <div>
