@@ -37,15 +37,17 @@ export default function Navbar() {
                   Trang chủ
                 </Link>
               </li>
-              <li className="nav-item ml-5">
-                <Link to="/user" className="nav-link">
-                  <span>
-                    <i className="fas fa-user" />
-                  </span>
-                  <span> </span>
-                  Người dùng
-                </Link>
-              </li>
+              {value.loggedIn === true ? (
+                <li className="nav-item ml-5">
+                  <Link to="/dashboard" className="nav-link">
+                    <span>
+                      <i className="fas fa-user" />
+                    </span>
+                    <span> </span>
+                    Người dùng
+                  </Link>
+                </li>
+              ) : null}
             </ul>
             <Link to="/cart" className="ml-auto">
               <ButtonContainer>

@@ -9,6 +9,8 @@ import Default from "./components/Default";
 import Cart from "./components/Cart";
 import SignIn from "./components/User/Login";
 import SignUp from "./components/User/Signup";
+import Dashboard from './components/User/Dashboard';
+import Orders from './components/User/Orders';
 import Modal from "./components/Modal";
 import { UserConsumer } from "./userContext";
 class App extends Component {
@@ -28,6 +30,9 @@ class App extends Component {
                 </Route>
                 <Route path="/signup">
                   {value.loggedIn ? <Redirect to="/cart" /> : <SignUp />}
+                </Route>
+                <Route path="/dashboard">
+                  {value.loggedIn ? <Dashboard /> : <Redirect to="/" />}
                 </Route>
                 <Route component={Default} />
               </Switch>
