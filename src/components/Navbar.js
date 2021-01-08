@@ -1,11 +1,15 @@
-import React, { Component } from "react";
+import React, { Component, useRef } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import logo from "../logo.png";
 import { ButtonContainer } from "./Button";
 import { UserConsumer } from "../userContext";
+import { useToasts } from "react-toast-notifications";
+import ConfirmDialog from "./ConfirmBox";
 export default function Navbar() {
   // render() {
+  const { addToast } = useToasts();
+  const childRefLog = useRef();
   return (
     <UserConsumer>
       {(value) => {
@@ -62,12 +66,24 @@ export default function Navbar() {
               </Link>
             ) : (
               <Link to="/" className="ml-auto">
-                <ButtonContainer onClick={logOut}>
+                <ButtonContainer
+                  onClick={() => childRefLog.current.handleClickOpen()}
+                >
                   <span className="mr-2">
                     <i className="fas fa-sign-out-alt" />
                   </span>
                   Đăng xuất
                 </ButtonContainer>
+                <ConfirmDialog
+                  ref={childRefLog}
+                  action={() => logOut()}
+                  title={"Đăng xuất"}
+                  addToast={() => {
+                    addToast(`Đăng xuất khỏi Master Sales thành công`, {
+                      appearance: "success",
+                    });
+                  }}
+                />
               </Link>
             )}
           </Nav>
