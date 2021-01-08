@@ -65,18 +65,28 @@ export default function CartTotals(props) {
                 <strong> {Number(cartTotal).toLocaleString()}đ </strong>
               </h5>
               <br />
-              <Link to="/cart">
-                <button
-                  className="btn btn-outline-primary text-uppercase mb-3 px-5"
-                  type="button"
-                  onClick={() => {
-                    // dat hang o day
+              {/* <Link to="/cart"> */}
+              <button
+                className="btn btn-outline-primary text-uppercase mb-3 px-5"
+                type="button"
+                onClick={() => {
+                  // dat hang o day
+                  const user = JSON.parse(window.localStorage.getItem("user"));
+                  if (
+                    !(
+                      Object.keys(user).length === 0 &&
+                      user.constructor === Object
+                    )
+                  ) {
                     childRefOrder.current.handleClickOpen();
-                  }}
-                >
-                  Đặt hàng
-                </button>
-              </Link>
+                  } else {
+                    history.push("/login");
+                  }
+                }}
+              >
+                Đặt hàng
+              </button>
+              {/* </Link> */}
               <ConfirmDialog
                 ref={childRefOrder}
                 action={orderCart}

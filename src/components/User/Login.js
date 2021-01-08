@@ -76,9 +76,9 @@ export default function SignIn(props) {
   const validate = (fieldValues = values) => {
     let temp = { ...errors };
     if ("username" in fieldValues)
-      temp.username = fieldValues.username ? "" : "Bạn chưa nhập tên đăng nhập";
+      temp.username = fieldValues.username ? "" : "Hãy nhập tên đăng nhập";
     if ("password" in fieldValues)
-      temp.password = fieldValues.password ? "" : "Bạn chưa nhập mật khẩu";
+      temp.password = fieldValues.password ? "" : "Hãy nhập mật khẩu";
     setErrors({
       ...temp,
     });

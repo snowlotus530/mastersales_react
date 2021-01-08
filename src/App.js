@@ -24,10 +24,10 @@ class App extends Component {
                 <Route path="/details" component={Details} />
                 <Route path="/cart" component={Cart} />
                 <Route path="/login">
-                  {value.loggedIn ? <Redirect to="/" /> : <SignIn />}
+                  {value.loggedIn ? <Redirect to="/cart" /> : <SignIn />}
                 </Route>
                 <Route path="/signup">
-                  {value.loggedIn ? <Redirect to="/" /> : <SignUp />}
+                  {value.loggedIn ? <Redirect to="/cart" /> : <SignUp />}
                 </Route>
                 <Route component={Default} />
               </Switch>

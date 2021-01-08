@@ -73,13 +73,28 @@ const getUsersFromDB = async (user) =>
     );
 
 const loginDB = async (user) =>
-  await axios.post(apiUrl + "/khachhang/login", user).then((result) => {
-    //alert(JSON.stringify(result.data));
-    return result.data;
-  }, (error) => {
+  await axios.post(apiUrl + "/khachhang/login", user).then(
+    (result) => {
+      //alert(JSON.stringify(result.data));
+      return result.data;
+    },
+    (error) => {
       //alert('no find user');
       return null;
-  });
+    }
+  );
+
+const postUserToDB = async (user) =>
+  await axios.post(apiUrl + "/khachhang", user).then(
+    (result) => {
+      //alert(JSON.stringify(result.data));
+      return result.data;
+    },
+    (error) => {
+      //alert('no find user');
+      return null;
+    }
+  );
 
 export {
   getProductsFromDB,
@@ -88,7 +103,8 @@ export {
   postOrderToDB,
   postOrderDetailToDB,
   getUsersFromDB,
-  loginDB
+  postUserToDB,
+  loginDB,
 };
 
 // fetch("http://localhost:51224/api/mathang")

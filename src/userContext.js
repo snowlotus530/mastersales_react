@@ -27,8 +27,10 @@ class UserProvider extends Component {
     if (JSON.parse(window.localStorage.getItem("loggedIn")) === null) {
       window.localStorage.setItem("loggedIn", false);
     }
-    this.setState({user: JSON.parse(window.localStorage.getItem("user"))});
-    this.setState({loggedIn: JSON.parse(window.localStorage.getItem("loggedIn"))});
+    this.setState({ user: JSON.parse(window.localStorage.getItem("user")) });
+    this.setState({
+      loggedIn: JSON.parse(window.localStorage.getItem("loggedIn")),
+    });
 
     try {
       // await getProducts();
@@ -61,7 +63,6 @@ class UserProvider extends Component {
       };
     });
   };
-
 
   render() {
     return (

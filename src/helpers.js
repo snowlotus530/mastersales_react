@@ -1,4 +1,4 @@
-import { getOrdersFromDB, getOrderDetailsFromDB } from "./api";
+import { getOrdersFromDB, getOrderDetailsFromDB, getUsersFromDB } from "./api";
 
 const filterNumber = (code) => {
   let number = "";
@@ -40,4 +40,16 @@ const autoGenerateOrderDetail = async () => {
   return autoGenerateCode("", flag, 1);
 };
 
-export { autoGenerateOrder, autoGenerateOrderDetail };
+const autoGenerateUser = async () => {
+  let flag = 0;
+  let _listTemp = [];
+  await getUsersFromDB(_listTemp);
+  _listTemp.forEach((item) => {
+    let number = filterNumber(item.id);
+    if (number > flag) flag = number;
+  });
+  flag++;
+  return autoGenerateCode("KH", flag, 1);
+};
+
+export { autoGenerateOrder, autoGenerateOrderDetail, autoGenerateUser };
