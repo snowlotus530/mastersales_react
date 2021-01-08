@@ -19,7 +19,7 @@ const getProducts = async () => {
       ...product,
     };
   });
-  console.log("after get", storeProducts);
+  // console.log("after get", storeProducts);
 };
 
 class ProductProvider extends Component {
@@ -64,11 +64,7 @@ class ProductProvider extends Component {
     this.state.cartTotal = JSON.parse(window.localStorage.getItem("cartTotal"));
     try {
       await getProducts();
-      console.log("abc first");
-      //console.log("before set ", storeProducts);
       this.setProducts();
-      console.log("abc then");
-      //console.log("after set ", storeProducts);
     } catch (error) {
       alert("error fetching product data");
     }
@@ -290,14 +286,11 @@ class ProductProvider extends Component {
   orderCart = async () => {
     let newIdOrder;
     await autoGenerateOrder().then((result) => (newIdOrder = result));
-    let userId = JSON.parse(window.localStorage.getItem('user')).id;
+    let userId = JSON.parse(window.localStorage.getItem("user")).id;
     const order = {
       id: newIdOrder,
       maKH: userId,
-      ngayDat: new Date()
-        .toISOString()
-        .slice(0, 19)
-        .replace("T", " "),
+      ngayDat: new Date().toISOString().slice(0, 19).replace("T", " "),
       thanhTien: this.state.cartTotal,
       trangThai: 0,
       isDeleted: false,
@@ -308,7 +301,9 @@ class ProductProvider extends Component {
     console.log("get order ", order);
     await postOrderToDB(order);
     let newIdOrderdetail;
-    await autoGenerateOrderDetail().then((result) => (newIdOrderdetail = result));
+    await autoGenerateOrderDetail().then(
+      (result) => (newIdOrderdetail = result)
+    );
     this.state.cart.forEach(async (product, index) => {
       const orderDetail = {
         id: "CTPDH" + (parseInt(newIdOrderdetail) + index).toString(),
@@ -325,7 +320,6 @@ class ProductProvider extends Component {
       await postOrderDetailToDB(orderDetail);
     });
     await this.clearCart();
-    
   };
   render() {
     return (

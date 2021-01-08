@@ -1,36 +1,40 @@
 import React, { Component } from "react";
 import { detailProduct } from "./data";
 import axios from "axios";
+import { getOrdersOfUserFromDB } from "./api";
 const UserContext = React.createContext();
 
-let storeProducts = [];
+let ordersInUser = [];
 
-// const getProducts = async () => {
-//   await getProductsFromDB(storeProducts);
-//   storeProducts.forEach((product) => {
-//     product = {
-//       ...product,
-//     };
-//   });
-//   console.log("after get", storeProducts);
-// };
+const getOrdersOfUsers = async (userId) => {
+  await getOrdersOfUserFromDB(userId, ordersInUser);
+  ordersInUser.forEach((order) => {
+    order = { ...order };
+  });
+  console.log("after get", ordersInUser);
+};
 
 class UserProvider extends Component {
   state = {
     user: null,
     loggedIn: false,
+    orders: [],
   };
-  componentDidMount() {
+  async componentDidMount() {
     if (JSON.parse(window.localStorage.getItem("user")) === null) {
       window.localStorage.setItem("user", JSON.stringify({}));
     }
     if (JSON.parse(window.localStorage.getItem("loggedIn")) === null) {
       window.localStorage.setItem("loggedIn", false);
     }
+    if (JSON.parse(window.localStorage.getItem("orders")) === null) {
+      window.localStorage.setItem("orders", JSON.stringify([]));
+    }
     this.setState({ user: JSON.parse(window.localStorage.getItem("user")) });
     this.setState({
       loggedIn: JSON.parse(window.localStorage.getItem("loggedIn")),
     });
+    this.state.orders = JSON.parse(window.localStorage.getItem("orders"));
 
     try {
       // await getProducts();
@@ -42,9 +46,14 @@ class UserProvider extends Component {
     }
   }
 
-  logIn = (user) => {
+  logIn = async (user) => {
     window.localStorage.setItem("loggedIn", true);
     window.localStorage.setItem("user", JSON.stringify(user));
+
+    await getOrdersOfUsers(user.id);
+    console.log(user.id);
+    this.setOrdersOfUser();
+
     this.setState(() => {
       return {
         user: JSON.parse(window.localStorage.getItem("user")),
@@ -56,12 +65,28 @@ class UserProvider extends Component {
   logOut = () => {
     window.localStorage.setItem("loggedIn", false);
     window.localStorage.setItem("user", JSON.stringify({}));
+    window.localStorage.setItem("orders", JSON.stringify([]));
     this.setState(() => {
       return {
         user: JSON.parse(window.localStorage.getItem("user")),
         loggedIn: JSON.parse(window.localStorage.getItem("loggedIn")),
+        order: JSON.parse(window.localStorage.getItem("order")),
       };
     });
+  };
+
+  setOrdersOfUser = async () => {
+    let ordersToShow = [];
+    //await getProductsFromDB(productsFromDB);
+    ordersToShow.push(...ordersInUser.map((item) => item));
+    // if (JSON.parse(window.localStorage.getItem("orders")).length === 0) {
+      console.log("local set orders");
+      window.localStorage.setItem("orders", JSON.stringify(ordersToShow));
+    // }
+    this.setState(() => {
+      return { orders: JSON.parse(window.localStorage.getItem("orders")) };
+    });
+    console.log("orders ", this.state.orders);
   };
 
   render() {
@@ -70,6 +95,7 @@ class UserProvider extends Component {
         value={{
           ...this.state,
           logIn: this.logIn,
+          setOrdersOfUser: this.setOrdersOfUser,
           logOut: this.logOut,
         }}
       >

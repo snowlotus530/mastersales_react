@@ -96,6 +96,21 @@ const postUserToDB = async (user) =>
     }
   );
 
+const getOrdersOfUserFromDB = async (userId, orders) =>
+  await axios
+    .get(apiUrl + "/phieudathang/user/" + userId)
+    .then((response) => response.data)
+    .then(
+      (result) => {
+        orders.push(...result.map((item) => item));
+        //console.log("fetching: ", orders);
+      },
+      (error) => {
+        alert("API for orders user connection failed, turn on server", error);
+        console.log("Orders user get api error: ", error);
+      }
+    );
+
 export {
   getProductsFromDB,
   getOrdersFromDB,
@@ -105,6 +120,7 @@ export {
   getUsersFromDB,
   postUserToDB,
   loginDB,
+  getOrdersOfUserFromDB
 };
 
 // fetch("http://localhost:51224/api/mathang")
