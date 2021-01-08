@@ -8,6 +8,7 @@ import Details from "./components/Details";
 import Default from "./components/Default";
 import Cart from "./components/Cart";
 import SignIn from "./components/User/Login";
+import SignUp from "./components/User/Signup";
 import Modal from "./components/Modal";
 import { UserConsumer } from "./userContext";
 class App extends Component {
@@ -24,6 +25,9 @@ class App extends Component {
                 <Route path="/cart" component={Cart} />
                 <Route path="/login">
                   {value.loggedIn ? <Redirect to="/" /> : <SignIn />}
+                </Route>
+                <Route path="/signup">
+                  {value.loggedIn ? <Redirect to="/" /> : <SignUp />}
                 </Route>
                 <Route component={Default} />
               </Switch>

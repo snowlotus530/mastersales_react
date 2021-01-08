@@ -12,6 +12,9 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
+import useForm from "../../useForm";
+import { useToasts } from "react-toast-notifications";
+import { UserConsumer } from "../../userContext";
 
 function Copyright() {
   return (
@@ -46,92 +49,164 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SignUp() {
+const initialFieldValues = {
+  username: "",
+  password: "",
+  fullname: "",
+  address: "",
+  phone: "",
+};
+
+export default function SignUp(props) {
   const classes = useStyles();
 
+  const { addToast } = useToasts();
+
+  const validate = (fieldValues = values) => {
+    let temp = { ...errors };
+    if ("fullname" in fieldValues)
+      temp.fullname = fieldValues.fullname ? "" : "Bạn chưa nhập họ tên";
+    if ("username" in fieldValues)
+      temp.username = fieldValues.username ? "" : "Bạn chưa nhập tên đăng nhập";
+    if ("password" in fieldValues)
+      temp.password = fieldValues.password ? "" : "Bạn chưa nhập mật khẩu";
+    if ("address" in fieldValues)
+      temp.address = fieldValues.address ? "" : "Bạn chưa nhập địa chỉ";
+    if ("phone" in fieldValues)
+      temp.phone = fieldValues.phone ? "" : "Bạn chưa nhập số điện thoại";
+    setErrors({
+      ...temp,
+    });
+
+    if (fieldValues == values) return Object.values(temp).every((x) => x == "");
+  };
+
+  const {
+    values,
+    setValues,
+    errors,
+    setErrors,
+    handleInputChange,
+    resetForm,
+  } = useForm(initialFieldValues, validate);
+
+  const handleSubmit = async (e, value) => {
+    e.preventDefault();
+    if (validate()) {
+      const user = {
+        id: 1,
+        tenDangNhap: values.username,
+        matKhau: values.password,
+        tenKh: values.fullname,
+        diaChi: values.address,
+        sdt: values.phone,
+      };
+      //const signupRes = await signupDB(user);
+      // if (signupRes !== null) {
+      //   value.login(signupRes);
+      //   addToast("Đăng kí tài khoản Master Sales thành công", {
+      //     appearance: "success",
+      //   });
+      //   //props.history.push("/");
+      // } else {
+      //   addToast("Tài khoản không thể đăng kí, cùng thử lại nhé", {
+      //     appearance: "warning",
+      //   });
+      // }
+    }
+  };
+
   return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
-        </Avatar>
-        <form className={classes.form} noValidate>
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                autoComplete="fname"
-                name="firstName"
-                variant="outlined"
-                required
-                fullWidth
-                id="firstName"
-                label="First Name"
-                autoFocus
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="lastName"
-                label="Last Name"
-                name="lastName"
-                autoComplete="lname"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <FormControlLabel
-                control={<Checkbox value="allowExtraEmails" color="primary" />}
-                label="I want to receive inspiration, marketing promotions and updates via email."
-              />
-            </Grid>
-          </Grid>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-            Đăng kí
-          </Button>
-          <Grid container justify="flex-end">
-            <Grid item>
-              <Link href="#" variant="body2">
-                Đã có tài khoản? Đăng nhập
-              </Link>
-            </Grid>
-          </Grid>
-        </form>
-      </div>
-      <Box mt={5}>
-        <Copyright />
-      </Box>
-    </Container>
+    <UserConsumer>
+      {(value) => {
+        return (
+          <Container component="main" maxWidth="xs">
+            <CssBaseline />
+            <div className={classes.paper}>
+              <Avatar className={classes.avatar}>
+                <LockOutlinedIcon />
+              </Avatar>
+              <form className={classes.form} noValidate onSubmit={(e) => handleSubmit(e,value)}>
+                <Grid container spacing={2}>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      autoComplete="fname"
+                      name="firstName"
+                      variant="outlined"
+                      required
+                      fullWidth
+                      id="firstName"
+                      label="First Name"
+                      autoFocus
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      variant="outlined"
+                      required
+                      fullWidth
+                      id="lastName"
+                      label="Last Name"
+                      name="lastName"
+                      autoComplete="lname"
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      variant="outlined"
+                      required
+                      fullWidth
+                      id="email"
+                      label="Email Address"
+                      name="email"
+                      autoComplete="email"
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      variant="outlined"
+                      required
+                      fullWidth
+                      name="password"
+                      label="Password"
+                      type="password"
+                      id="password"
+                      autoComplete="current-password"
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <FormControlLabel
+                      control={
+                        <Checkbox value="allowExtraEmails" color="primary" />
+                      }
+                      label="I want to receive inspiration, marketing promotions and updates via email."
+                    />
+                  </Grid>
+                </Grid>
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                  className={classes.submit}
+                >
+                  Đăng kí
+                </Button>
+                <Grid container justify="flex-end">
+                  <Grid item>
+                    <Link href="#" variant="body2">
+                      Đã có tài khoản? Đăng nhập
+                    </Link>
+                  </Grid>
+                </Grid>
+              </form>
+            </div>
+            <Box mt={5}>
+              <Copyright />
+            </Box>
+          </Container>
+        );
+      }}
+    </UserConsumer>
   );
 }
