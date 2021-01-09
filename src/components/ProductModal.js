@@ -4,7 +4,7 @@ import { ProductConsumer } from "../productContext";
 import { ButtonContainer } from "./Button";
 import { Link } from "react-router-dom";
 import { Button } from "bootstrap";
-export default class Modal extends Component {
+export default class ProductModal extends Component {
   render() {
     return (
       <ProductConsumer>

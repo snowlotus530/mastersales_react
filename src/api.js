@@ -111,6 +111,17 @@ const getOrdersOfUserFromDB = async (userId, orders) =>
       }
     );
 
+const putOrderToDeleteFromDB = async (orderId, order) => {
+  await axios.put(apiUrl + "/phieudathang/" + orderId, order).then(
+    (result) => {
+      //alert(JSON.stringify(result.data));
+    },
+    (error) => {
+      alert("Put order to isDeleted failed, try again", error);
+    }
+  );
+};
+
 export {
   getProductsFromDB,
   getOrdersFromDB,
@@ -120,7 +131,8 @@ export {
   getUsersFromDB,
   postUserToDB,
   loginDB,
-  getOrdersOfUserFromDB
+  getOrdersOfUserFromDB,
+  putOrderToDeleteFromDB
 };
 
 // fetch("http://localhost:51224/api/mathang")

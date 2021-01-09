@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import { detailProduct } from "./data";
 import axios from "axios";
-import { getOrdersOfUserFromDB } from "./api";
+import { getOrdersOfUserFromDB, putOrderToDeleteFromDB } from "./api";
 const UserContext = React.createContext();
 
 let ordersInUser = [];
 
-const getOrdersOfUsers = async (userId) => {
+const getOrdersOfUser = async (userId) => {
   await getOrdersOfUserFromDB(userId, ordersInUser);
   ordersInUser.forEach((order) => {
     order = { ...order };
@@ -18,6 +18,8 @@ class UserProvider extends Component {
   state = {
     user: null,
     loggedIn: false,
+    modalOpen: false,
+    modalOrder: {},
     orders: [],
   };
   async componentDidMount() {
@@ -50,7 +52,7 @@ class UserProvider extends Component {
     window.localStorage.setItem("loggedIn", true);
     window.localStorage.setItem("user", JSON.stringify(user));
 
-    await getOrdersOfUsers(user.id);
+    await getOrdersOfUser(user.id);
     console.log(user.id);
     this.setOrdersOfUser();
 
@@ -66,6 +68,7 @@ class UserProvider extends Component {
     window.localStorage.setItem("loggedIn", false);
     window.localStorage.setItem("user", JSON.stringify({}));
     window.localStorage.setItem("orders", JSON.stringify([]));
+    ordersInUser = [];
     this.setState(() => {
       return {
         user: JSON.parse(window.localStorage.getItem("user")),
@@ -80,13 +83,47 @@ class UserProvider extends Component {
     //await getProductsFromDB(productsFromDB);
     ordersToShow.push(...ordersInUser.map((item) => item));
     // if (JSON.parse(window.localStorage.getItem("orders")).length === 0) {
-      console.log("local set orders");
-      window.localStorage.setItem("orders", JSON.stringify(ordersToShow));
+    console.log("local set orders");
+    window.localStorage.setItem("orders", JSON.stringify(ordersToShow));
     // }
     this.setState(() => {
       return { orders: JSON.parse(window.localStorage.getItem("orders")) };
     });
     console.log("orders ", this.state.orders);
+  };
+
+  deleteOrder = async (orderId) => {
+    let orderDeleted;
+    this.state.orders.forEach(
+      (order) => {
+        if(order.id === orderId){
+          order.isDeleted = true;
+          orderDeleted = {...order};
+        }
+      }
+    );
+    await putOrderToDeleteFromDB(orderId, orderDeleted);
+    window.localStorage.setItem("orders", JSON.stringify([...this.state.orders]));
+    this.setState(() => {
+      return { orders: JSON.parse(window.localStorage.getItem("orders")) };
+    });
+    console.log("orders after delete: ", this.state.orders);
+  };
+
+  openModal = (id) => {
+    const order = this.getItem(id);
+    this.setState(() => {
+      return { modalOrder: order, modalOpen: true };
+    });
+  };
+  closeModal = () => {
+    this.setState(() => {
+      return { modalOpen: false };
+    });
+  };
+  getItem = (id) => {
+    const order = this.state.orders.find((item) => item.id === id);
+    return order;
   };
 
   render() {
@@ -97,6 +134,9 @@ class UserProvider extends Component {
           logIn: this.logIn,
           setOrdersOfUser: this.setOrdersOfUser,
           logOut: this.logOut,
+          deleteOrder: this.deleteOrder,
+          openModal: this.openModal,
+          closeModal: this.closeModal,
         }}
       >
         {this.props.children}

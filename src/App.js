@@ -9,9 +9,10 @@ import Default from "./components/Default";
 import Cart from "./components/Cart";
 import SignIn from "./components/User/Login";
 import SignUp from "./components/User/Signup";
-import Dashboard from './components/User/Dashboard';
-import Orders from './components/User/Orders';
-import Modal from "./components/Modal";
+import Dashboard from "./components/User/Dashboard";
+import Orders from "./components/User/OrderDetails";
+import ProductModal from "./components/ProductModal";
+import OrderModal from "./components/User/OrderModal";
 import { UserConsumer } from "./userContext";
 class App extends Component {
   render() {
@@ -32,11 +33,12 @@ class App extends Component {
                   {value.loggedIn ? <Redirect to="/cart" /> : <SignUp />}
                 </Route>
                 <Route path="/dashboard">
-                  {value.loggedIn ? <Dashboard /> : <Redirect to="/" />}
+                  {value.loggedIn ? <Dashboard /> : <ProductList />}
                 </Route>
                 <Route component={Default} />
               </Switch>
-              <Modal />
+              <ProductModal />
+              <OrderModal />
             </React.Fragment>
           );
         }}

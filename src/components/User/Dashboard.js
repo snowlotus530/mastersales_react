@@ -21,8 +21,9 @@ import NotificationsIcon from "@material-ui/icons/Notifications";
 import { mainListItems, secondaryListItems } from "./listItems";
 // import Chart from './Chart';
 import Order from "./Order";
-import Orders from "./Orders";
+import Orders from "./OrderDetails";
 import { UserConsumer } from "../../userContext";
+import Title from "./Title";
 
 function Copyright() {
   return (
@@ -111,7 +112,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
   },
   fixedHeight: {
-    height: 240,
+    height: 200,
   },
 }));
 
@@ -129,27 +130,6 @@ export default function Dashboard() {
   return (
     <div className={classes.root}>
       <CssBaseline />
-      {/* <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
-        <Toolbar className={classes.toolbar}>
-          <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            Dashboard
-          </Typography>
-          <IconButton color="inherit">
-            <Badge badgeContent={4} color="secondary">
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
-        </Toolbar>
-      </AppBar> */}
       <Drawer
         variant="permanent"
         classes={{
@@ -168,7 +148,6 @@ export default function Dashboard() {
         <List>{secondaryListItems}</List>
       </Drawer>
       <main className={classes.content}>
-        <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
             {/* Chart */}
@@ -188,23 +167,18 @@ export default function Dashboard() {
                   return a.trangThai - b.trangThai;
                 });
                 return sorted.map((order) => {
-                  return (
-                    <Grid item xs={12} md={4} lg={3}>
+                  return order.isDeleted === false ? (
+                    <Grid key={order.id} item xs={12} sm={6} md={4} lg={3}>
                       <Paper className={fixedHeightPaper}>
-                        <Order key={order.id} order={order} />
+                        <Order value={value} order={order} />
                       </Paper>
                     </Grid>
-                  );
+                  ) : null;
                 });
               }}
             </UserConsumer>
 
             {/* Recent Orders */}
-            <Grid item xs={12}>
-              <Paper className={classes.paper}>
-                <Orders />
-              </Paper>
-            </Grid>
           </Grid>
           <Box pt={4}>
             <Copyright />
