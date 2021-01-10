@@ -151,10 +151,20 @@ export default function Dashboard() {
       </Drawer>
       <main className={classes.content}>
         <Container maxWidth="lg" className={classes.container}>
-          <Switch>
-            <Route exact path="/dashboard" component={ListOrder} />
-            <Route path="/dashboard/customer" component={Account} />
-          </Switch>
+          <UserConsumer>
+            {(value) => {
+              return (
+                <Switch>
+                  <Route exact path="/dashboard">
+                    <ListOrder value={value} />
+                  </Route>
+                  <Route path="/dashboard/customer">
+                    <Account value={value} />
+                  </Route>
+                </Switch>
+              );
+            }}
+          </UserConsumer>
         </Container>
         <Box pt={4}>
           <Copyright />

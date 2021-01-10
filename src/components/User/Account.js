@@ -11,6 +11,9 @@ import ListItem from "@material-ui/core/ListItem";
 import { UserConsumer } from "../../userContext";
 import ListItemText from "@material-ui/core/ListItemText";
 import { Button } from "@material-ui/core";
+import { useToasts } from "react-toast-notifications";
+import useForm from "../../useForm";
+import { getOneUserFromDB, putUserToDB } from "../../api";
 
 const useStyles = makeStyles((theme) => ({
   listItem: {
@@ -24,197 +27,255 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
     alignSelf: "center",
   },
+  form: {
+    width: "100%", // Fix IE 11 issue.
+    marginTop: theme.spacing(2),
+  },
   paper: {
     padding: theme.spacing(6),
     display: "flex",
     overflow: "auto",
     flexDirection: "column",
   },
+  submit: {
+    margin: theme.spacing(3, 0, 1),
+  },
 }));
 
-export default function AddressForm() {
+export default function AddressForm(props) {
   const classes = useStyles();
   const [isEdit, setIsEdit] = useState(false);
+  const { addToast } = useToasts();
+  const valueUser = props.value;
+
+  const initialFieldValues = {
+    fullname: valueUser.user.tenKh,
+    address: valueUser.user.diaChi,
+    phone: valueUser.user.sdt,
+  };
+
+  const validate = (fieldValues = values) => {
+    let temp = { ...errors };
+    if ("fullname" in fieldValues)
+      temp.fullname = fieldValues.fullname ? "" : "Hãy nhập họ tên";
+    if ("address" in fieldValues)
+      temp.address = fieldValues.address ? "" : "Hãy nhập địa chỉ";
+    if ("phone" in fieldValues)
+      temp.phone = fieldValues.phone ? "" : "Hãy nhập số điện thoại";
+    // if ("agree" in fieldValues)
+    setErrors({
+      ...temp,
+    });
+
+    if (fieldValues == values) return Object.values(temp).every((x) => x == "");
+  };
+
+  const {
+    values,
+    setValues,
+    errors,
+    setErrors,
+    handleInputChange,
+    resetForm,
+  } = useForm(initialFieldValues, validate);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (validate()) {
+      const userId = valueUser.user.id;
+      // await getOneUserFromDB(userId, currentUser);
+      // alert("user " + JSON.stringify(valueUser.user));
+      const user = {
+        ...valueUser.user,
+        tenKh: values.fullname,
+        diaChi: values.address,
+        sdt: values.phone,
+      };
+      // alert("new user " + JSON.stringify(user));
+      let res = await putUserToDB(userId, user);
+      // alert(JSON.stringify(res));
+
+      if (res !== false) {
+        valueUser.logIn(res);
+        setIsEdit(false);
+        addToast("Sửa tài khoản thành công", {
+          appearance: "success",
+        });
+        //   //props.history.push("/");
+      } else {
+        addToast(
+          "Có lỗi hoặc là đã tồn tại số điện thoại này, cùng thử lại nhé",
+          {
+            appearance: "warning",
+          }
+        );
+      }
+    }
+  };
+
+  const total = valueUser.orders
+    ?.map((order) =>
+      order.trangThai === 1 && order.isDeleted === false ? order.thanhTien : 0
+    )
+    .reduce((a, b) => a + b, 0);
+
   return (
     <Grid container direction="column" alignItems="center" justify="center">
-      <Grid item xs={12} sm={10} md={9} lg={8}>
-        <UserConsumer>
-          {(value) => {
-            const total = value.orders
-              ?.map((order) =>
-                order.trangThai === 1 && order.isDeleted === false
-                  ? order.thanhTien
-                  : 0
-              )
-              .reduce(((a, b) => a + b),0);
-            return (
-              <Paper className={classes.paper}>
-                {isEdit === false ? (
-                  <React.Fragment>
-                    <Typography variant="h6" gutterBottom>
-                      Thông tin cá nhân
-                    </Typography>
-                    <List disablePadding>
-                      <ListItem className={classes.listItem}>
-                        <ListItemText primary="Tên" />
-                        <Typography
-                          variant="subtitle1"
-                          className={classes.total}
-                        >
-                          {value.user.tenKh}
-                        </Typography>
-                      </ListItem>
-                      <ListItem className={classes.listItem}>
-                        <ListItemText primary="Địa chỉ" />
-                        <Typography
-                          variant="subtitle1"
-                          className={classes.total}
-                        >
-                          {value.user.diaChi}
-                        </Typography>
-                      </ListItem>
-                      <ListItem className={classes.listItem}>
-                        <ListItemText primary="SĐT" />
-                        <Typography
-                          variant="subtitle1"
-                          className={classes.total}
-                        >
-                          {value.user.sdt}
-                        </Typography>
-                      </ListItem>
-                    </List>
-                    <Grid
-                      container
-                      spacing={2}
-                      direction="row"
-                      alignItems="center"
-                      justify="center"
-                    >
-                      <Grid item xs={12} sm={6}>
-                        <Typography
-                          variant="h6"
-                          gutterBottom
-                          className={classes.title}
-                        >
-                          Tổng số tiền đã thanh toán
-                        </Typography>
-                        <Typography style={{color:'#e12345'}} gutterBottom>{total > 50000000? 'Khách hàng thân thiết' : ''}</Typography>
-                      </Grid>
-                      <Grid item container direction="column" xs={12} sm={6}>
-                        <Typography
-                          variant="h3"
-                          gutterBottom
-                          className={classes.title}
-                        >
-                          {Number(total).toLocaleString()}đ
-                        </Typography>
-                      </Grid>
+      <Grid item xs={12} sm={10} md={6} lg={4}>
+        {/* <UserConsumer>
+          {(valueUser) => {
+            
+            return ( */}
+        <Paper className={classes.paper}>
+          {isEdit === false ? (
+            <React.Fragment>
+              <Typography variant="h6" gutterBottom>
+                Thông tin cá nhân
+              </Typography>
+              <List>
+                <ListItem className={classes.listItem}>
+                  <ListItemText primary="Tên" />
+                  <Typography variant="subtitle1" className={classes.total}>
+                    {valueUser.user.tenKh}
+                  </Typography>
+                </ListItem>
+                <ListItem className={classes.listItem}>
+                  <ListItemText primary="Địa chỉ" />
+                  <Typography variant="subtitle1" className={classes.total}>
+                    {valueUser.user.diaChi}
+                  </Typography>
+                </ListItem>
+                <ListItem className={classes.listItem}>
+                  <ListItemText primary="SĐT" />
+                  <Typography variant="subtitle1" className={classes.total}>
+                    {valueUser.user.sdt}
+                  </Typography>
+                </ListItem>
+              </List>
+              <Grid
+                container
+                spacing={2}
+                direction="row"
+                alignItems="center"
+                justify="center"
+              >
+                <Grid item xs={12} sm={6}>
+                  <Typography
+                    variant="h6"
+                    gutterBottom
+                    className={classes.title}
+                  >
+                    Tổng số tiền đã thanh toán
+                  </Typography>
+                  <Typography style={{ color: "#e12345" }} gutterBottom>
+                    {total > 50000000 ? "Khách hàng thân thiết" : ""}
+                  </Typography>
+                </Grid>
+                <Grid item container direction="column" xs={12} sm={6}>
+                  <Typography
+                    variant="h3"
+                    gutterBottom
+                    className={classes.title}
+                  >
+                    {Number(total).toLocaleString()}đ
+                  </Typography>
+                </Grid>
+              </Grid>
+              <Button onClick={() => setIsEdit(true)}>Sửa</Button>
+            </React.Fragment>
+          ) : (
+            <React.Fragment>
+              <Typography variant="h6" gutterBottom>
+                Sửa thông tin cá nhân
+              </Typography>
+              <Grid container spacing={1}>
+                <form
+                  className={classes.form}
+                  noValidate
+                  onSubmit={(e) => handleSubmit(e)}
+                >
+                  <Grid container spacing={2}>
+                    <Grid item xs={12}>
+                      <TextField
+                        variant="outlined"
+                        //margin="normal"
+                        required
+                        fullWidth
+                        id="fullname"
+                        label="Họ tên"
+                        name="fullname"
+                        autoComplete="off"
+                        autoFocus
+                        value={values.fullname}
+                        onChange={handleInputChange}
+                        {...(errors.fullname && {
+                          error: true,
+                          helperText: errors.fullname,
+                        })}
+                      />
                     </Grid>
-                    <Button onClick={() => setIsEdit(true)}>Sửa</Button>
-                  </React.Fragment>
-                ) : (
-                  <React.Fragment>
-                    <Typography variant="h6" gutterBottom>
-                      Shipping address
-                    </Typography>
-                    <Grid container spacing={3}>
-                      <Grid item xs={12} sm={6}>
-                        <TextField
-                          required
-                          id="firstName"
-                          name="firstName"
-                          label="First name"
-                          fullWidth
-                          autoComplete="given-name"
-                        />
-                      </Grid>
-                      <Grid item xs={12} sm={6}>
-                        <TextField
-                          required
-                          id="lastName"
-                          name="lastName"
-                          label="Last name"
-                          fullWidth
-                          autoComplete="family-name"
-                        />
-                      </Grid>
-                      <Grid item xs={12}>
-                        <TextField
-                          required
-                          id="address1"
-                          name="address1"
-                          label="Address line 1"
-                          fullWidth
-                          autoComplete="shipping address-line1"
-                        />
-                      </Grid>
-                      <Grid item xs={12}>
-                        <TextField
-                          id="address2"
-                          name="address2"
-                          label="Address line 2"
-                          fullWidth
-                          autoComplete="shipping address-line2"
-                        />
-                      </Grid>
-                      <Grid item xs={12} sm={6}>
-                        <TextField
-                          required
-                          id="city"
-                          name="city"
-                          label="City"
-                          fullWidth
-                          autoComplete="shipping address-level2"
-                        />
-                      </Grid>
-                      <Grid item xs={12} sm={6}>
-                        <TextField
-                          id="state"
-                          name="state"
-                          label="State/Province/Region"
-                          fullWidth
-                        />
-                      </Grid>
-                      <Grid item xs={12} sm={6}>
-                        <TextField
-                          required
-                          id="zip"
-                          name="zip"
-                          label="Zip / Postal code"
-                          fullWidth
-                          autoComplete="shipping postal-code"
-                        />
-                      </Grid>
-                      <Grid item xs={12} sm={6}>
-                        <TextField
-                          required
-                          id="country"
-                          name="country"
-                          label="Country"
-                          fullWidth
-                          autoComplete="shipping country"
-                        />
-                      </Grid>
-                      <Grid item xs={12}>
-                        <FormControlLabel
-                          control={
-                            <Checkbox
-                              color="secondary"
-                              name="saveAddress"
-                              value="yes"
-                            />
-                          }
-                          label="Use this address for payment details"
-                        />
-                      </Grid>
+                    <Grid item xs={12}>
+                      <TextField
+                        variant="outlined"
+                        //margin="normal"
+                        required
+                        fullWidth
+                        id="address"
+                        label="Địa chỉ"
+                        name="address"
+                        autoComplete="off"
+                        autoFocus
+                        value={values.address}
+                        onChange={handleInputChange}
+                        {...(errors.address && {
+                          error: true,
+                          helperText: errors.address,
+                        })}
+                      />
                     </Grid>
-                    <Button onClick={() => setIsEdit(false)}>Lưu</Button>
-                  </React.Fragment>
-                )}
-              </Paper>
-            );
-          }}
-        </UserConsumer>
+                    <Grid item xs={12}>
+                      <TextField
+                        variant="outlined"
+                        //margin="normal"
+                        required
+                        fullWidth
+                        id="phone"
+                        label="Số điện thoại"
+                        name="phone"
+                        autoComplete="off"
+                        autoFocus
+                        value={values.phone}
+                        onChange={handleInputChange}
+                        {...(errors.phone && {
+                          error: true,
+                          helperText: errors.phone,
+                        })}
+                      />
+                    </Grid>
+                  </Grid>
+                  <Button
+                    type="submit"
+                    fullWidth
+                    // variant="contained"
+                    // color="primary"
+                    className={classes.submit}
+                  >
+                    Lưu thông tin
+                  </Button>
+                  <Grid container justify="flex-end">
+                    <Grid item>
+                      {/* <Link href="#" variant="body2">
+                        Đã có tài khoản? Đăng nhập
+                      </Link> */}
+                    </Grid>
+                  </Grid>
+                </form>
+              </Grid>
+            </React.Fragment>
+          )}
+        </Paper>
+        {/* }}
+        </UserConsumer> */}
       </Grid>
     </Grid>
   );

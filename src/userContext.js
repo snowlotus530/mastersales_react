@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { detailProduct } from "./data";
 import axios from "axios";
-import { getOrdersOfUserFromDB, putOrderToDeleteFromDB } from "./api";
+import { getOrdersOfUserFromDB, putOrderToDB } from "./api";
 const UserContext = React.createContext();
 
 let ordersInUser = [];
@@ -105,7 +105,7 @@ class UserProvider extends Component {
         }
       }
     );
-    await putOrderToDeleteFromDB(orderId, orderDeleted);
+    await putOrderToDB(orderId, orderDeleted);
     window.localStorage.setItem("orders", JSON.stringify([...this.state.orders]));
     this.setState(() => {
       return { orders: JSON.parse(window.localStorage.getItem("orders")) };

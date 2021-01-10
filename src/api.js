@@ -111,13 +111,39 @@ const getOrdersOfUserFromDB = async (userId, orders) =>
       }
     );
 
-const putOrderToDeleteFromDB = async (orderId, order) => {
+const putOrderToDB = async (orderId, order) => {
   await axios.put(apiUrl + "/phieudathang/" + orderId, order).then(
     (result) => {
       //alert(JSON.stringify(result.data));
     },
     (error) => {
-      alert("Put order to isDeleted failed, try again", error);
+      alert("Put order failed, try again", error);
+    }
+  );
+};
+
+const getOneUserFromDB = async (userId) => {
+  await axios.get(apiUrl + "/khachhang/" + userId).then(
+    (result) => {
+      alert("fetch user"+ JSON.stringify(result.data));
+      return result.data;
+    },
+    (error) => {
+      alert("Get user failed", error);
+    }
+  );
+};
+
+const putUserToDB = async (userId, user) => {
+  return await axios.put(apiUrl + "/khachhang/" + userId, user).then(
+    (result) => {
+      //alert(JSON.stringify(result.data));
+      console.log("fetching data ",user);
+      return user;
+    },
+    (error) => {
+      // alert("Put user failed, try again", error);
+      return false;
     }
   );
 };
@@ -130,9 +156,11 @@ export {
   postOrderDetailToDB,
   getUsersFromDB,
   postUserToDB,
+  getOneUserFromDB,
   loginDB,
   getOrdersOfUserFromDB,
-  putOrderToDeleteFromDB
+  putOrderToDB,
+  putUserToDB,
 };
 
 // fetch("http://localhost:51224/api/mathang")
