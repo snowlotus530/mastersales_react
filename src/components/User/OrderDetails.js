@@ -29,7 +29,7 @@ export default function OrderDetails(props) {
   const rows = props.details;
   const totalWithoutTax = rows
     ?.map((item) => item.tongTien)
-    .reduce(((acc, next) => acc + next),0);
+    .reduce((acc, next) => acc + next, 0);
   return (
     <React.Fragment>
       <Title>Tổng tiền đơn hàng: {Number(props.total).toLocaleString()}đ</Title>
@@ -61,6 +61,12 @@ export default function OrderDetails(props) {
       <div className={classes.seeMore}>
         <Typography variant="body1" color="textSecondary" align="center">
           Phí phụ thu: {Number(props.total - totalWithoutTax).toLocaleString()}đ
+        </Typography>
+        <Typography color="textSecondary" className={classes.orderContext}>
+          {/* {props.order.ngayDat.slice(0,10).split('-').join('/')} */}
+          {props.order.diaChiNhan
+            ? `Địa chỉ nhận: ${props.order.diaChiNhan}`
+            : ""}
         </Typography>
       </div>
     </React.Fragment>

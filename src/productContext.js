@@ -283,7 +283,7 @@ class ProductProvider extends Component {
     );
   };
 
-  orderCart = async () => {
+  orderCart = async (address) => {
     let newIdOrder;
     await autoGenerateOrder().then((result) => (newIdOrder = result));
     let userId = JSON.parse(window.localStorage.getItem("user")).id;
@@ -294,6 +294,7 @@ class ProductProvider extends Component {
       thanhTien: this.state.cartTotal,
       trangThai: 0,
       isDeleted: false,
+      diaChiNhan: address,
       // maKhNavigation: null,
       // ctPhieudathangs: [],
       // hoadons: [],

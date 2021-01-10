@@ -5,7 +5,7 @@ import { ButtonContainer } from "../Button";
 import { Link } from "react-router-dom";
 import { ProductConsumer } from "../../productContext";
 import { Button } from "bootstrap";
-import Orders from "./OrderDetails";
+import OrderDetails from "./OrderDetails";
 export default class OrderModal extends Component {
   render() {
     return (
@@ -15,12 +15,14 @@ export default class OrderModal extends Component {
             <UserConsumer>
               {(value) => {
                 const { modalOpen, closeModal } = value;
+                const currentOrder = value.modalOrder;
                 const { ctPhieudathangs, thanhTien } = value.modalOrder;
                 const detailsToShow = ctPhieudathangs?.map((item) => {
-                  
-                  const findProduct = valueProduct.products?.find(product => product.id === item.maMh);
-                  return {...item, tenMh: findProduct.title}
-                })
+                  const findProduct = valueProduct.products?.find(
+                    (product) => product.id === item.maMh
+                  );
+                  return { ...item, tenMh: findProduct.title };
+                });
                 if (!modalOpen) {
                   return null;
                 } else {
@@ -32,7 +34,8 @@ export default class OrderModal extends Component {
                             className="col-8 mx-auto col-md-8 col-lg-8 p-5 text-center text-capitalize"
                             id="modal"
                           >
-                            <Orders
+                            <OrderDetails
+                              order={currentOrder}
                               details={detailsToShow}
                               total={thanhTien}
                             />
