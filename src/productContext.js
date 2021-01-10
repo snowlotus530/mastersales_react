@@ -290,7 +290,7 @@ class ProductProvider extends Component {
     const order = {
       id: newIdOrder,
       maKH: userId,
-      ngayDat: new Date().toISOString().slice(0, 19).replace("T", " "),
+      ngayDat: new Date().toLocaleString(),
       thanhTien: this.state.cartTotal,
       trangThai: 0,
       isDeleted: false,

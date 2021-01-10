@@ -14,7 +14,7 @@ import Badge from "@material-ui/core/Badge";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
-import { Link } from "react-router-dom";
+import { Link, Switch, Route } from "react-router-dom";
 import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import NotificationsIcon from "@material-ui/icons/Notifications";
@@ -24,6 +24,8 @@ import Order from "./Order";
 import Orders from "./OrderDetails";
 import { UserConsumer } from "../../userContext";
 import Title from "./Title";
+import ListOrder from "./ListOrder";
+import Account from "./Account";
 
 function Copyright() {
   return (
@@ -118,7 +120,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Dashboard() {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
   //   const handleDrawerOpen = () => {
   //     setOpen(true);
   //   };
@@ -149,41 +151,14 @@ export default function Dashboard() {
       </Drawer>
       <main className={classes.content}>
         <Container maxWidth="lg" className={classes.container}>
-          <Grid container spacing={3}>
-            {/* Chart */}
-            {/* <Grid item xs={12} md={8} lg={9}>
-              <Paper className={fixedHeightPaper}>
-                <Chart />
-              </Paper>
-            </Grid> */}
-            {/* Recent Order */}
-
-            <UserConsumer>
-              {(value) => {
-                const sorted = value.orders.sort(function (a, b) {
-                  if (a.trangThai == b.trangThai) {
-                    return b.thanhTien - a.thanhTien;
-                  }
-                  return a.trangThai - b.trangThai;
-                });
-                return sorted.map((order) => {
-                  return order.isDeleted === false ? (
-                    <Grid key={order.id} item xs={12} sm={6} md={4} lg={3}>
-                      <Paper className={fixedHeightPaper}>
-                        <Order value={value} order={order} />
-                      </Paper>
-                    </Grid>
-                  ) : null;
-                });
-              }}
-            </UserConsumer>
-
-            {/* Recent Orders */}
-          </Grid>
-          <Box pt={4}>
-            <Copyright />
-          </Box>
+          <Switch>
+            <Route exact path="/dashboard" component={ListOrder} />
+            <Route path="/dashboard/customer" component={Account} />
+          </Switch>
         </Container>
+        <Box pt={4}>
+          <Copyright />
+        </Box>
       </main>
     </div>
   );

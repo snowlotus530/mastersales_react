@@ -65,7 +65,7 @@ export default function Product (props){
               </h6>
             ) : null}
             {discount > 5 ? (
-              <h6 className="text-bright bg-warning rounded-circle p-1 mb-0">
+              <h6 className="text-white bg-danger rounded-circle p-1 mb-0">
                 -{discount}
                 <span className="mr-1">%</span>
               </h6>

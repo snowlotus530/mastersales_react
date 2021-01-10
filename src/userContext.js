@@ -52,16 +52,16 @@ class UserProvider extends Component {
     window.localStorage.setItem("loggedIn", true);
     window.localStorage.setItem("user", JSON.stringify(user));
 
-    await getOrdersOfUser(user.id);
-    console.log(user.id);
-    this.setOrdersOfUser();
+    // await getOrdersOfUser(user.id);
+    // console.log(user.id);
+    
 
     this.setState(() => {
       return {
         user: JSON.parse(window.localStorage.getItem("user")),
         loggedIn: JSON.parse(window.localStorage.getItem("loggedIn")),
       };
-    });
+    }, this.setOrdersOfUser);
   };
 
   logOut = () => {
@@ -79,12 +79,15 @@ class UserProvider extends Component {
   };
 
   setOrdersOfUser = async () => {
+    ordersInUser = [];
+    await getOrdersOfUser(this.state.user.id);
+    console.log("user ",this.state.user);
     let ordersToShow = [];
     //await getProductsFromDB(productsFromDB);
     ordersToShow.push(...ordersInUser.map((item) => item));
     // if (JSON.parse(window.localStorage.getItem("orders")).length === 0) {
-    console.log("local set orders");
     window.localStorage.setItem("orders", JSON.stringify(ordersToShow));
+    console.log("local setorders ",JSON.parse(window.localStorage.getItem("orders")));
     // }
     this.setState(() => {
       return { orders: JSON.parse(window.localStorage.getItem("orders")) };

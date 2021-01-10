@@ -50,44 +50,49 @@ export default function Navbar() {
               ) : null}
             </ul>
             <Link to="/cart" className="ml-auto">
-              <ButtonContainer>
+              <ButtonContainer cart>
                 <span className="mr-2">
                   <i className="fas fa-cart-plus " />
                 </span>
                 Giỏ hàng
               </ButtonContainer>
             </Link>
-            {value.loggedIn !== true ? (
-              <Link to="/login" className="ml-auto">
-                <ButtonContainer>
-                  <span className="mr-2">
-                    <i className="fas fa-key" />
-                  </span>
-                  Đăng nhập
-                </ButtonContainer>
-              </Link>
-            ) : (
-              <div className="ml-auto">
-                <ButtonContainer
-                  onClick={() => childRefLog.current.handleClickOpen()}
-                >
-                  <span className="mr-2">
-                    <i className="fas fa-sign-out-alt" />
-                  </span>
-                  Đăng xuất
-                </ButtonContainer>
-                <ConfirmDialog
-                  ref={childRefLog}
-                  action={() => logOut()}
-                  title={"Đăng xuất"}
-                  addToast={() => {
-                    addToast(`Đăng xuất khỏi Master Sales thành công`, {
-                      appearance: "success",
-                    });
-                  }}
-                />
-              </div>
-            )}
+            <ul className="navbar-nav align-items-center">
+              <li className="nav-item ml-5">
+                {value.loggedIn !== true ? (
+                  <Link to="/login" className="ml-auto">
+                    <ButtonContainer login>
+                      <span className="mr-2">
+                        <i className="fas fa-key" />
+                      </span>
+                      Đăng nhập
+                    </ButtonContainer>
+                  </Link>
+                ) : (
+                  <div className="ml-auto">
+                    <ButtonContainer
+                      login
+                      onClick={() => childRefLog.current.handleClickOpen()}
+                    >
+                      <span className="mr-2">
+                        <i className="fas fa-sign-out-alt" />
+                      </span>
+                      Đăng xuất
+                    </ButtonContainer>
+                    <ConfirmDialog
+                      ref={childRefLog}
+                      action={() => logOut()}
+                      title={"Đăng xuất"}
+                      addToast={() => {
+                        addToast(`Đăng xuất khỏi Master Sales thành công`, {
+                          appearance: "success",
+                        });
+                      }}
+                    />
+                  </div>
+                )}
+              </li>
+            </ul>
           </Nav>
         );
       }}
