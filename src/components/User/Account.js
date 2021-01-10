@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function AddressForm(props) {
+export default function Account(props) {
   const classes = useStyles();
   const [isEdit, setIsEdit] = useState(false);
   const { addToast } = useToasts();

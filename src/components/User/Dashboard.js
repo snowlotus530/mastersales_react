@@ -26,6 +26,7 @@ import { UserConsumer } from "../../userContext";
 import Title from "./Title";
 import ListOrder from "./ListOrder";
 import Account from "./Account";
+import Contact from "./Contact";
 
 function Copyright() {
   return (
@@ -160,6 +161,9 @@ export default function Dashboard() {
                   </Route>
                   <Route path="/dashboard/customer">
                     <Account value={value} />
+                  </Route>
+                  <Route path="/dashboard/contact">
+                    <Contact value={value} />
                   </Route>
                 </Switch>
               );

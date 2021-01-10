@@ -1,10 +1,18 @@
 import React, { Component } from "react";
 import { detailProduct } from "./data";
 import axios from "axios";
-import { getOrdersOfUserFromDB, putOrderToDB } from "./api";
+import { autoGenerateContact } from "./helpers";
+import {
+  getOrdersOfUserFromDB,
+  putOrderToDB,
+  getContactsOfUserFromDB,
+  putContactToDB,
+  postContactToDB,
+} from "./api";
 const UserContext = React.createContext();
 
 let ordersInUser = [];
+let contactsInUser = [];
 
 const getOrdersOfUser = async (userId) => {
   await getOrdersOfUserFromDB(userId, ordersInUser);
@@ -14,6 +22,14 @@ const getOrdersOfUser = async (userId) => {
   console.log("after get", ordersInUser);
 };
 
+const getContactsOfUser = async (userId) => {
+  await getContactsOfUserFromDB(userId, contactsInUser);
+  contactsInUser.forEach((contact) => {
+    contact = { ...contact };
+  });
+  console.log("after get", contactsInUser);
+};
+
 class UserProvider extends Component {
   state = {
     user: null,
@@ -21,6 +37,7 @@ class UserProvider extends Component {
     modalOpen: false,
     modalOrder: {},
     orders: [],
+    contacts: [],
   };
   async componentDidMount() {
     if (JSON.parse(window.localStorage.getItem("user")) === null) {
@@ -32,11 +49,15 @@ class UserProvider extends Component {
     if (JSON.parse(window.localStorage.getItem("orders")) === null) {
       window.localStorage.setItem("orders", JSON.stringify([]));
     }
+    if (JSON.parse(window.localStorage.getItem("contacts")) === null) {
+      window.localStorage.setItem("contacts", JSON.stringify([]));
+    }
     this.setState({ user: JSON.parse(window.localStorage.getItem("user")) });
     this.setState({
       loggedIn: JSON.parse(window.localStorage.getItem("loggedIn")),
     });
     this.state.orders = JSON.parse(window.localStorage.getItem("orders"));
+    this.state.contacts = JSON.parse(window.localStorage.getItem("contacts"));
 
     try {
       // await getProducts();
@@ -54,26 +75,34 @@ class UserProvider extends Component {
 
     // await getOrdersOfUser(user.id);
     // console.log(user.id);
-    
 
-    this.setState(() => {
-      return {
-        user: JSON.parse(window.localStorage.getItem("user")),
-        loggedIn: JSON.parse(window.localStorage.getItem("loggedIn")),
-      };
-    }, this.setOrdersOfUser);
+    this.setState(
+      () => {
+        return {
+          user: JSON.parse(window.localStorage.getItem("user")),
+          loggedIn: JSON.parse(window.localStorage.getItem("loggedIn")),
+        };
+      },
+      () => {
+        this.setOrdersOfUser();
+        this.setContactsOfUser();
+      },
+    );
   };
 
   logOut = () => {
     window.localStorage.setItem("loggedIn", false);
     window.localStorage.setItem("user", JSON.stringify({}));
     window.localStorage.setItem("orders", JSON.stringify([]));
+    window.localStorage.setItem("contacts", JSON.stringify([]));
     ordersInUser = [];
+    contactsInUser = [];
     this.setState(() => {
       return {
         user: JSON.parse(window.localStorage.getItem("user")),
         loggedIn: JSON.parse(window.localStorage.getItem("loggedIn")),
-        order: JSON.parse(window.localStorage.getItem("order")),
+        orders: JSON.parse(window.localStorage.getItem("orders")),
+        contacts: JSON.parse(window.localStorage.getItem("contacts")),
       };
     });
   };
@@ -81,13 +110,16 @@ class UserProvider extends Component {
   setOrdersOfUser = async () => {
     ordersInUser = [];
     await getOrdersOfUser(this.state.user.id);
-    console.log("user ",this.state.user);
+    console.log("user 1 ", this.state.user);
     let ordersToShow = [];
     //await getProductsFromDB(productsFromDB);
     ordersToShow.push(...ordersInUser.map((item) => item));
     // if (JSON.parse(window.localStorage.getItem("orders")).length === 0) {
     window.localStorage.setItem("orders", JSON.stringify(ordersToShow));
-    console.log("local setorders ",JSON.parse(window.localStorage.getItem("orders")));
+    console.log(
+      "local setorders ",
+      JSON.parse(window.localStorage.getItem("orders"))
+    );
     // }
     this.setState(() => {
       return { orders: JSON.parse(window.localStorage.getItem("orders")) };
@@ -95,22 +127,80 @@ class UserProvider extends Component {
     console.log("orders ", this.state.orders);
   };
 
+  setContactsOfUser = async () => {
+    contactsInUser = [];
+    await getContactsOfUser(this.state.user.id);
+    console.log("user 2 ", this.state.user);
+    let contactsToShow = [];
+    //await getProductsFromDB(productsFromDB);
+    contactsToShow.push(...contactsInUser.map((item) => item));
+    // if (JSON.parse(window.localStorage.getItem("orders")).length === 0) {
+    window.localStorage.setItem("contacts", JSON.stringify(contactsToShow));
+    console.log(
+      "local setcontacts ",
+      JSON.parse(window.localStorage.getItem("contacts"))
+    );
+    // }
+    this.setState(() => {
+      return { contacts: JSON.parse(window.localStorage.getItem("contacts")) };
+    });
+    console.log("contacts ", this.state.contacts);
+  };
+
   deleteOrder = async (orderId) => {
     let orderDeleted;
-    this.state.orders.forEach(
-      (order) => {
-        if(order.id === orderId){
-          order.isDeleted = true;
-          orderDeleted = {...order};
-        }
+    this.state.orders.forEach((order) => {
+      if (order.id === orderId) {
+        order.isDeleted = true;
+        orderDeleted = { ...order };
       }
-    );
+    });
     await putOrderToDB(orderId, orderDeleted);
-    window.localStorage.setItem("orders", JSON.stringify([...this.state.orders]));
+    window.localStorage.setItem(
+      "orders",
+      JSON.stringify([...this.state.orders])
+    );
     this.setState(() => {
       return { orders: JSON.parse(window.localStorage.getItem("orders")) };
     });
     console.log("orders after delete: ", this.state.orders);
+  };
+
+  deleteContact = async (contactId) => {
+    let contactDeleted;
+    this.state.contacts.forEach((contact) => {
+      if (contact.id === contactId) {
+        contact.isDeleted = true;
+        contactDeleted = { ...contact };
+      }
+    });
+    await putContactToDB(contactId, contactDeleted);
+    window.localStorage.setItem(
+      "contacts",
+      JSON.stringify([...this.state.contacts])
+    );
+    this.setState(() => {
+      return { contacts: JSON.parse(window.localStorage.getItem("contacts")) };
+    });
+    console.log("contacts after delete: ", this.state.contacts);
+  };
+
+  postContact = async (question) => {
+    let newIdContact;
+    await autoGenerateContact().then((result) => (newIdContact = result));
+    let userId = JSON.parse(window.localStorage.getItem("user")).id;
+    const contact = {
+      id: newIdContact,
+      maKH: userId,
+      cauHoi: question,
+      traLoi: null,
+      isDeleted: false,
+      ngayDat: new Date().toLocaleString(),
+      ngayTraLoi: null,
+      nguoiTraLoi: null,
+    };
+    console.log("get contact ", contact);
+    await postContactToDB(contact);
   };
 
   openModal = (id) => {
@@ -140,6 +230,9 @@ class UserProvider extends Component {
           deleteOrder: this.deleteOrder,
           openModal: this.openModal,
           closeModal: this.closeModal,
+          setContactsOfUser: this.setContactsOfUser,
+          deleteContact: this.deleteContact,
+          postContact: this.postContact,
         }}
       >
         {this.props.children}

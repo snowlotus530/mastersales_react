@@ -155,6 +155,7 @@ export default function CartTotals(props) {
               name="address"
               autoComplete="off"
               autoFocus
+              multiline
               value={values.address}
               onChange={handleInputChange}
               {...(errors.address && {

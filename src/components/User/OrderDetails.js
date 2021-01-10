@@ -36,6 +36,7 @@ export default function OrderDetails(props) {
       <Table size="small">
         <TableHead>
           <TableRow>
+            <TableCell align="center">STT</TableCell>
             <TableCell align="center">Tên sản phẩm</TableCell>
             <TableCell align="center">Giá bán (VND)</TableCell>
             <TableCell align="center">Số lượng</TableCell>
@@ -44,8 +45,9 @@ export default function OrderDetails(props) {
         </TableHead>
         <TableBody>
           {rows &&
-            rows.map((row) => (
+            rows.map((row, index) => (
               <TableRow key={row.id}>
+                <TableCell align="center">{index + 1}</TableCell>
                 <TableCell align="center">{row.tenMh}</TableCell>
                 <TableCell align="center">
                   {Number(row.donGia).toLocaleString()}
