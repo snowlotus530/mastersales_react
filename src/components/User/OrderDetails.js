@@ -27,8 +27,9 @@ const useStyles = makeStyles((theme) => ({
 export default function OrderDetails(props) {
   const classes = useStyles();
   const rows = props.details;
-  const totalWithoutTax = rows?.map((item) => item.tongTien)
-    .reduce((acc, next) => acc + next);
+  const totalWithoutTax = rows
+    ?.map((item) => item.tongTien)
+    .reduce(((acc, next) => acc + next),0);
   return (
     <React.Fragment>
       <Title>Tổng tiền đơn hàng: {Number(props.total).toLocaleString()}đ</Title>
@@ -59,8 +60,7 @@ export default function OrderDetails(props) {
       </Table>
       <div className={classes.seeMore}>
         <Typography variant="body1" color="textSecondary" align="center">
-          Phí vận chuyển:{" "}
-          {Number(props.total - totalWithoutTax).toLocaleString()}đ
+          Phí phụ thu: {Number(props.total - totalWithoutTax).toLocaleString()}đ
         </Typography>
       </div>
     </React.Fragment>

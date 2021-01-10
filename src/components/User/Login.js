@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundPosition: "center",
   },
   paper: {
-    margin: theme.spacing(8, 4),
+    margin: theme.spacing(6, 4),
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -139,13 +139,11 @@ export default function SignIn(props) {
               square
             >
               <div className={classes.paper}>
-                <Avatar className={classes.avatar}>
-                  <LockOutlinedIcon />
-                </Avatar>
+                <img style={{width:'20rem', height: '15rem'}} src="https://i.pinimg.com/originals/35/4e/c4/354ec459e1d4a56819d490b5a8c9e531.png" alt="Log in" />
                 <form
                   className={classes.form}
                   noValidate
-                  onSubmit={(e) => handleSubmit(e,value)}
+                  onSubmit={(e) => handleSubmit(e, value)}
                 >
                   <TextField
                     variant="outlined"

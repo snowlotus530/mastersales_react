@@ -37,6 +37,8 @@ body {
 }
 .text-yellow{
   color: var(--mainYellow);
+}.text-white{
+  color: var(--mainWhite)
 }
 .navbar {
   justify-content: flex-start !important;

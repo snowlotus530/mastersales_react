@@ -5,10 +5,23 @@ export const ButtonContainer = styled.button`
   font-size: 1.4rem;
   background: transparent;
   border: 0.05rem solid var(--lightBlue);
-  border-color: ${props =>
-    props.cart ? "var(--mainYellow)" : props.close? "var(--mainRed)" : "var(--lightBlue)"};
+  border-color: ${(props) =>
+    props.cart
+      ? "var(--mainYellow)"
+      : props.close
+      ? "var(--mainRed)"
+      : props.login
+      ? "transparent"
+      : "var(--mainBlue)"};
   color: var(--lightBlue);
-  color: ${props => (props.cart ? "var(--mainYellow)" : props.close? "var(--mainRed)" : "var(--lightBlue)")};
+  color: ${(props) =>
+    props.cart
+      ? "var(--mainYellow)"
+      : props.close
+      ? "var(--mainRed)"
+      : props.login
+      ? "var(--mainWhite)"
+      : "var(--mainBlue)"};
   border-radius: 0.5rem;
   padding: 0.2rem 0.5rem;
   outline-color: red;
@@ -18,9 +31,15 @@ export const ButtonContainer = styled.button`
   transition: all 0.5s ease-in-out;
   &:hover {
     background: var(--lightBlue);
-    background: ${props =>
-      props.cart ? "var(--mainYellow)" : props.close? "var(--mainRed)" : "var(--lightBlue)"};
-    color: var(--mainBlue);
+    background: ${(props) =>
+      props.cart
+        ? "var(--mainYellow)"
+        : props.close
+        ? "var(--mainRed)"
+        : props.login
+        ? "transparent"
+        : "var(--mainBlue)"};
+    color: var(--mainWhite);
   }
   &:focus {
     outline: none;

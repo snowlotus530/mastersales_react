@@ -19,19 +19,27 @@ export const mainListItems = (
       </ListItemIcon>
       <ListItemText primary="Dashboard" />
     </ListItem> */}
-    <Link to="/dashboard" style={{ textDecoration: 'none' }}>
-      <ListItem button>
-        <ListItemIcon>
-          <ShoppingCartIcon />
-        </ListItemIcon>
-        <ListItemText primary="Phiếu đặt hàng" />
-      </ListItem>
-    </Link>
-    <ListItem button>
+    <ListItem
+      button
+      component={Link}
+      to="/dashboard"
+      style={{ textDecoration: "none" }}
+    >
+      <ListItemIcon>
+        <ShoppingCartIcon />
+      </ListItemIcon>
+      <ListItemText primary="Phiếu đặt hàng" />
+    </ListItem>
+    <ListItem
+      button
+      component={Link}
+      to="/dashboard/customer"
+      style={{ textDecoration: "none" }}
+    >
       <ListItemIcon>
         <PeopleIcon />
       </ListItemIcon>
-      <ListItemText primary="Customers" />
+      <ListItemText primary="Tài khoản" />
     </ListItem>
     <ListItem button>
       <ListItemIcon>
@@ -50,12 +58,12 @@ export const mainListItems = (
 
 export const secondaryListItems = (
   <div>
-    <ListSubheader inset>Saved reports</ListSubheader>
+    <ListSubheader inset>Tư vấn khách hàng</ListSubheader>
     <ListItem button>
       <ListItemIcon>
         <AssignmentIcon />
       </ListItemIcon>
-      <ListItemText primary="Current month" />
+      <ListItemText primary="Liên hệ" />
     </ListItem>
     {/* <ListItem button>
       <ListItemIcon>

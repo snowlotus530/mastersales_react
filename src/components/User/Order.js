@@ -33,15 +33,19 @@ export default function Order(props) {
       </Typography>
       <Typography color="textSecondary" className={classes.orderContext}>
         {/* {props.order.ngayDat.slice(0,10).split('-').join('/')} */}
-        {moment(props.order.ngayDat).format("DD/MM/YYYY, h:mm:ss a")}
+        {moment(props.order.ngayDat).format("DD/MM/YYYY, h:mm:ss")}
       </Typography>
       <Typography color="textSecondary" className={classes.orderContext}>
-        {moment(props.order.ngayDat).startOf("hour").fromNow()}
+        {moment(props.order.ngayDat).fromNow()}
       </Typography>
       <div className="d-flex justify-content-between">
-        <Link color="primary" href="#" onClick={() => {
-          props.value.openModal(props.order.id);
-        }}>
+        <Link
+          color="primary"
+          href="#"
+          onClick={() => {
+            props.value.openModal(props.order.id);
+          }}
+        >
           <span>
             <i className="fas fa-eye"></i>
           </span>{" "}

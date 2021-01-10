@@ -121,7 +121,7 @@ export default function SignUp(props) {
         });
       //   //props.history.push("/");
       } else {
-        addToast("Có lỗi xảy ra khi đăng kí tài khoản với tên đăng nhập đã có, cùng thử lại nhé", {
+        addToast("Đã tồn tại tên đăng nhập hoặc số điện thoại này, cùng thử lại nhé", {
           appearance: "warning",
         });
       }
