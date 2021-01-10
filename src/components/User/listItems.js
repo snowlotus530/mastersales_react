@@ -58,12 +58,17 @@ export const mainListItems = (
 
 export const secondaryListItems = (
   <div>
-    <ListSubheader inset>Tư vấn khách hàng</ListSubheader>
-    <ListItem button>
+    {/* <ListSubheader inset>Tư vấn khách hàng</ListSubheader> */}
+    <ListItem
+      button
+      component={Link}
+      to="/dashboard/contact"
+      style={{ textDecoration: "none" }}
+    >
       <ListItemIcon>
         <AssignmentIcon />
       </ListItemIcon>
-      <ListItemText primary="Liên hệ" />
+      <ListItemText primary="Liên hệ tư vấn" />
     </ListItem>
     {/* <ListItem button>
       <ListItemIcon>

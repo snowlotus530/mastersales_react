@@ -125,7 +125,7 @@ const putOrderToDB = async (orderId, order) => {
 const getOneUserFromDB = async (userId) => {
   await axios.get(apiUrl + "/khachhang/" + userId).then(
     (result) => {
-      alert("fetch user"+ JSON.stringify(result.data));
+      alert("fetch user" + JSON.stringify(result.data));
       return result.data;
     },
     (error) => {
@@ -138,7 +138,7 @@ const putUserToDB = async (userId, user) => {
   return await axios.put(apiUrl + "/khachhang/" + userId, user).then(
     (result) => {
       //alert(JSON.stringify(result.data));
-      console.log("fetching data ",user);
+      console.log("fetching data ", user);
       return user;
     },
     (error) => {
@@ -147,6 +147,59 @@ const putUserToDB = async (userId, user) => {
     }
   );
 };
+
+const getContactsFromDB = async (contacts) =>
+  await axios
+    .get(apiUrl + "/tuvankh")
+    .then((response) => response.data)
+    .then(
+      (result) => {
+        contacts.push(...result.map((item) => item));
+        //console.log("fetching: ", contacts);
+      },
+      (error) => {
+        alert("API for contacts connection failed, turn on server", error);
+        console.log("Contact get api error: ", error);
+      }
+    );
+
+const postContactToDB = async (contact) =>
+  await axios.post(apiUrl + "/tuvankh", contact).then(
+    (result) => {
+      //alert(JSON.stringify(result.data));
+      return result.data;
+    },
+    (error) => {
+      //alert('no find user');
+      return null;
+    }
+  );
+
+const putContactToDB = async (contactId, contact) => {
+  await axios.put(apiUrl + "/tuvankh/" + contactId, contact).then(
+    (result) => {
+      //alert(JSON.stringify(result.data));
+    },
+    (error) => {
+      alert("Put contact failed, try again", error);
+    }
+  );
+};
+
+const getContactsOfUserFromDB = async (userId, contacts) =>
+  await axios
+    .get(apiUrl + "/tuvankh/user/" + userId)
+    .then((response) => response.data)
+    .then(
+      (result) => {
+        contacts.push(...result.map((item) => item));
+        //console.log("fetching: ", contacts);
+      },
+      (error) => {
+        alert("API for contacts user connection failed, turn on server", error);
+        console.log("Contacts user get api error: ", error);
+      }
+    );
 
 export {
   getProductsFromDB,
@@ -161,6 +214,10 @@ export {
   getOrdersOfUserFromDB,
   putOrderToDB,
   putUserToDB,
+  getContactsFromDB,
+  postContactToDB,
+  putContactToDB,
+  getContactsOfUserFromDB,
 };
 
 // fetch("http://localhost:51224/api/mathang")
