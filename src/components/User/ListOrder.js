@@ -63,10 +63,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function ListOrder() {
+export default function ListOrder(props) {
   const classes = useStyles();
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-
+  const value = props.value;
+  const sorted = value.orders.sort(function (a, b) {
+    if (a.trangThai == b.trangThai) {
+      return Date.parse(b.ngayDat) - Date.parse(a.ngayDat);
+    }
+    return a.trangThai - b.trangThai;
+  });
   return (
     <Grid container spacing={3}>
       {/* Chart */}
@@ -77,25 +83,17 @@ export default function ListOrder() {
     </Grid> */}
       {/* Recent Order */}
 
-      <UserConsumer>
-        {(value) => {
-          const sorted = value.orders.sort(function (a, b) {
-            if (a.trangThai == b.trangThai) {
-              return Date.parse(b.ngayDat) - Date.parse(a.ngayDat);
-            }
-            return a.trangThai - b.trangThai;
-          });
-          return sorted.map((order) => {
-            return order.isDeleted === false ? (
-              <Grid key={order.id} item xs={12} sm={6} md={4} lg={3}>
-                <Paper className={fixedHeightPaper}>
-                  <Order value={value} order={order} />
-                </Paper>
-              </Grid>
-            ) : null;
-          });
-        }}
-      </UserConsumer>
+      {/* <UserConsumer> */}
+      {sorted.map((order) => {
+        return order.isDeleted === false ? (
+          <Grid key={order.id} item xs={12} sm={6} md={4} lg={3}>
+            <Paper className={fixedHeightPaper}>
+              <Order value={value} order={order} />
+            </Paper>
+          </Grid>
+        ) : null;
+      })}
+      {/* </UserConsumer> */}
 
       {/* Recent Orders */}
     </Grid>
