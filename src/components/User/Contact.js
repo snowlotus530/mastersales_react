@@ -115,6 +115,27 @@ export default function Contact(props) {
         <Paper className={classes.paper}>
           {isEdit === false ? (
             <React.Fragment>
+              <Grid
+                container
+                direction="row"
+                alignItems="center"
+                style={{ marginBottom: 10 }}
+              >
+                <Grid item xs={12} sm={3}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => valueUser.setContactsOfUser()}
+                  >
+                    <span>
+                      <i className="fas fa-sync">{` Refresh`}</i>
+                    </span>
+                  </Button>
+                </Grid>
+                <Grid item xs={12} sm={3}>
+                  <Button onClick={() => alert("this is")}>Sửa</Button>
+                </Grid>
+              </Grid>
               <Title>Bảng tư vấn</Title>
               <Table size="small">
                 <TableHead>

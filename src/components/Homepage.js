@@ -9,7 +9,7 @@ import CarouselList from "./Carousel";
 export default function Homepage(props) {
   return (
     <React.Fragment>
-      <Main className="py-5">
+      <Main className="py-3">
         <div className="container">
           <CarouselList />
           <ProductList />

@@ -13,6 +13,7 @@ body {
   background: var(--mainWhite) !important;
   color: var(--mainDark) !important;
 }
+
 .text-title {
   font-family: "Roboto", cursive;
   letter-spacing: 0.1rem;
@@ -68,6 +69,3 @@ img {
   width:inherit
 }
 
-@media (max-width: 576px) {
-  
-}

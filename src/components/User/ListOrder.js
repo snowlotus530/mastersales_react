@@ -69,12 +69,14 @@ export default function ListOrder(props) {
   const [filter, setFilter] = useState(true);
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
   const value = props.value;
-  let sorted = value.orders.sort(function (a, b) {
-    if (a.trangThai == b.trangThai) {
-      return Date.parse(b.ngayDat) - Date.parse(a.ngayDat);
-    }
-    return a.trangThai - b.trangThai;
-  });
+  let sorted = value.orders
+    .map((item) => (item.trangThai == 2 ? { ...item, trangThai: -1 } : item))
+    .sort(function (a, b) {
+      if (a.trangThai == b.trangThai) {
+        return Date.parse(b.ngayDat) - Date.parse(a.ngayDat);
+      }
+      return a.trangThai - b.trangThai;
+    });
   // sorted =
   //   filter === true
   //     ? sorted.filter((item) => item.thanhTien >= 100000000)
@@ -82,11 +84,28 @@ export default function ListOrder(props) {
   return (
     <Grid container spacing={3}>
       {/* Chart */}
-      {/* <Grid item xs={12} md={8} lg={9}>
-      <Paper className={fixedHeightPaper}>
-        <Chart />
-      </Paper>
-    </Grid> */}
+      <Grid
+        container
+        spacing={2}
+        direction="row"
+        alignItems="center"
+        style={{ margin: 10 }}
+      >
+        <Grid item xs={12} sm={3}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => value.setOrdersOfUser()}
+          >
+            <span>
+              <i className="fas fa-sync">{` Refresh`}</i>
+            </span>
+          </Button>
+        </Grid>
+        <Grid item xs={12} sm={3}>
+          <Button onClick={() => alert("this is")}>Sửa</Button>
+        </Grid>
+      </Grid>
       {/* Recent Order */}
 
       {/* <UserConsumer> */}

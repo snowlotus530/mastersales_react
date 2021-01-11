@@ -46,8 +46,8 @@ export default function Product(props) {
           }}
         </ProductConsumer>
         <div className="card-footer d-flex justify-content-between">
-          {/* <p className="align-self-center mb-0">{title}</p>
-            {discount > 0 && discount < 5 ? (
+          <p className="align-self-center mb-0">{title}</p>
+          {/* {discount > 0 && discount < 5 ? (
               <p className="text-yellow bg-dark rounded p-1">NEW</p>
             ) : discount > 20 ? (
               <p className="text-yellow bg-dark rounded p-1">HOT</p>

@@ -99,6 +99,21 @@
 //   }
 // ];
 
+export const carouselItems = [
+  {
+    image: "img-carousel/acer-1200-140-1200x140.png",
+  },
+  {
+    image: "img-carousel/dell-1200-140-1200x140.png",
+  },
+  {
+    image: "img-carousel/hp-1200-140-1200x140.png",
+  },
+  {
+    image: "img-carousel/lenovo-1200-140-1200x140.png",
+  },
+];
+
 export const detailProduct = {
   // id: 1,
   // title: "Google Pixel - Black",
@@ -111,3 +126,4 @@ export const detailProduct = {
   // count: 0,
   // total: 0,
 };
+
