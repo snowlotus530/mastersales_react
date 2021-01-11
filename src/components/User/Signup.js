@@ -115,7 +115,7 @@ export default function SignUp(props) {
         isDeleted: 0,
       };
       const signupRes = await postUserToDB(user);
-      alert(JSON.stringify(signupRes));
+      // alert(JSON.stringify(signupRes));
       if (signupRes !== null) {
         value.logIn(signupRes);
         addToast("Đăng kí tài khoản Master Sales thành công", {
