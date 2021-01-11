@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
@@ -19,9 +19,9 @@ import TableRow from "@material-ui/core/TableRow";
 import { Button } from "@material-ui/core";
 import Link from "@material-ui/core/Link";
 import Title from "./Title";
+import ConfirmDialog from "../ConfirmBox";
 import { useToasts } from "react-toast-notifications";
 import useForm from "../../useForm";
-import { getOneUserFromDB, postContactToDB, putUserToDB } from "../../api";
 
 const useStyles = makeStyles((theme) => ({
   listItem: {
@@ -59,6 +59,8 @@ export default function Contact(props) {
   const { addToast } = useToasts();
   const rows = props.value.contacts;
   const valueUser = props.value;
+
+  const childRef = useRef();
 
   const initialFieldValues = {
     question: "",
@@ -126,32 +128,51 @@ export default function Contact(props) {
                 </TableHead>
                 <TableBody>
                   {rows &&
-                    rows.map((row, index) => (
-                      <TableRow key={row.id}>
-                        <TableCell align="center">{index + 1}</TableCell>
-                        <TableCell align="center">{row.cauHoi}</TableCell>
-                        <TableCell align="center">{row.traLoi}</TableCell>
-                        <TableCell align="center">
-                          {moment(row.ngayDat).format("DD/MM/YYYY, h:mm:ss")}
-                        </TableCell>
-                        <TableCell align="center">
-                          {row.nguoiTraLoi !== null
-                            ? moment(row.ngayTraLoi).format(
-                                "DD/MM/YYYY, h:mm:ss"
-                              )
-                            : "Chưa trả lời"}
-                        </TableCell>
-                        <TableCell>
-                          <Link color="secondary" href="#" onClick={() => {
-                            //   valueUser.deleteContact();
-                          }}>
-                            <span>
-                              <i className="fa fa-trash" aria-hidden="true"></i>
-                            </span>
-                          </Link>
-                        </TableCell>
-                      </TableRow>
-                    ))}
+                    rows.map((row, index) =>
+                      row.isDeleted == false ? (
+                        <TableRow key={row.id}>
+                          <TableCell align="center">{index + 1}</TableCell>
+                          <TableCell align="center">{row.cauHoi}</TableCell>
+                          <TableCell align="center">{row.traLoi}</TableCell>
+                          <TableCell align="center">
+                            {moment(row.ngayDat).format("DD/MM/YYYY, h:mm:ss")}
+                          </TableCell>
+                          <TableCell align="center">
+                            {row.nguoiTraLoi !== null
+                              ? moment(row.ngayTraLoi).format(
+                                  "DD/MM/YYYY, h:mm:ss"
+                                )
+                              : "Chưa trả lời"}
+                          </TableCell>
+                          <TableCell>
+                            <Link
+                              color="secondary"
+                              href="#"
+                              onClick={() => {
+                                childRef.current.handleClickOpen();
+                              }}
+                            >
+                              <span>
+                                <i
+                                  className="fa fa-trash"
+                                  aria-hidden="true"
+                                ></i>
+                              </span>
+                            </Link>
+                            <ConfirmDialog
+                              ref={childRef}
+                              action={() => valueUser.deleteContact(row.id)}
+                              title={"Hủy câu hỏi"}
+                              addToast={() => {
+                                addToast(`Hủy câu hỏi thành công`, {
+                                  appearance: "success",
+                                });
+                              }}
+                            />
+                          </TableCell>
+                        </TableRow>
+                      ) : null
+                    )}
                 </TableBody>
               </Table>
               <div className={classes.seeMore}>

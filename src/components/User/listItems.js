@@ -28,7 +28,7 @@ export const mainListItems = (
       <ListItemIcon>
         <ShoppingCartIcon />
       </ListItemIcon>
-      <ListItemText primary="Phiếu đặt hàng" />
+      <ListItemText primary="Lịch sử mua hàng" />
     </ListItem>
     <ListItem
       button
@@ -41,13 +41,13 @@ export const mainListItems = (
       </ListItemIcon>
       <ListItemText primary="Tài khoản" />
     </ListItem>
-    <ListItem button>
+    {/* <ListItem button>
       <ListItemIcon>
         <BarChartIcon />
       </ListItemIcon>
       <ListItemText primary="Reports" />
     </ListItem>
-    {/* <ListItem button>
+    <ListItem button>
       <ListItemIcon>
         <LayersIcon />
       </ListItemIcon>
