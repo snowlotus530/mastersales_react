@@ -11,22 +11,18 @@ export default class ProductList extends Component {
   render() {
     return (
       <React.Fragment>
-        <ProductWrapper className="py-5">
-          <div className="container">
-            <Title name="Hot" title="sales" />
-            <div className="row">
-              {/* {  console.log('product list')} */}
-              <ProductConsumer>
-                {(value) => {
-                  console.log("product list inside");
-                  return value.products.map((product) => {
-                    return <Product key={product.id} product={product} />;
-                  });
-                }}
-              </ProductConsumer>
-            </div>
-          </div>
-        </ProductWrapper>
+        <Title name="Hot" title="sales" />
+        <div className="row">
+          {/* {  console.log('product list')} */}
+          <ProductConsumer>
+            {(value) => {
+              console.log("product list inside");
+              return value.products.map((product) => {
+                return <Product key={product.id} product={product} />;
+              });
+            }}
+          </ProductConsumer>
+        </div>
       </React.Fragment>
     );
   }
