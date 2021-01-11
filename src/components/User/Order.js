@@ -26,7 +26,11 @@ export default function Order(props) {
   return (
     <React.Fragment>
       <Title>
-        {props.order.trangThai === 0 ? "Chưa giao hàng" : "Đã thanh toán"}
+        {props.order.trangThai === 0
+          ? "Chưa giao hàng"
+          : props.order.trangThai === 1
+          ? "Đã thanh toán"
+          : "Không được duyệt"}
       </Title>
       <Typography component="p" variant="h4">
         {Number(props.order.thanhTien).toLocaleString()}đ

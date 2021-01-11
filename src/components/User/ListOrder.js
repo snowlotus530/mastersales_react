@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -19,6 +19,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import { mainListItems, secondaryListItems } from "./listItems";
+import { Button } from "@material-ui/core";
 // import Chart from './Chart';
 import Order from "./Order";
 import Orders from "./OrderDetails";
@@ -65,14 +66,19 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ListOrder(props) {
   const classes = useStyles();
+  const [filter, setFilter] = useState(true);
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
   const value = props.value;
-  const sorted = value.orders.sort(function (a, b) {
+  let sorted = value.orders.sort(function (a, b) {
     if (a.trangThai == b.trangThai) {
       return Date.parse(b.ngayDat) - Date.parse(a.ngayDat);
     }
     return a.trangThai - b.trangThai;
   });
+  // sorted =
+  //   filter === true
+  //     ? sorted.filter((item) => item.thanhTien >= 100000000)
+  //     : sorted;
   return (
     <Grid container spacing={3}>
       {/* Chart */}
@@ -93,6 +99,7 @@ export default function ListOrder(props) {
           </Grid>
         ) : null;
       })}
+
       {/* </UserConsumer> */}
 
       {/* Recent Orders */}
