@@ -1,7 +1,7 @@
 import React from "react";
 import Carousel from "react-material-ui-carousel";
 import { Paper } from "@material-ui/core";
-import {carouselItems} from '../data'
+import { carouselItems } from "../data";
 
 export default function CarouselList(props) {
   return (
@@ -15,7 +15,7 @@ export default function CarouselList(props) {
 
 function Item(props) {
   return (
-    <Paper>
+    <Paper style={{ width: 1100 }}>
       <img src={props.item.image} alt="Banner" />
     </Paper>
   );

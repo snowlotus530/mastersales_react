@@ -76,7 +76,7 @@ class ProductProvider extends Component {
     storeProducts.forEach((item, index) => {
       const random = 0 + Math.floor(Math.random() * 25);
       item.moTa =
-        "Lorem ipsum dolor amet offal butcher quinoa sustainable gastropub, echo park actually green juice sriracha paleo. Brooklyn sriracha semiotics, DIY coloring book mixtape craft beer sartorial hella blue bottle. Tote bag wolf authentic try-hard put a bird on it mumblecore. Unicorn lumbersexual master cleanse blog hella VHS, vaporware sartorial church-key cardigan single-origin coffee lo-fi organic asymmetrical. Taxidermy semiotics celiac stumptown scenester normcore, ethical helvetica photo booth gentrify.";
+        "Đi cùng với mức giá này, là thiết kế độc đáo, không lẫn vào đâu được. Tuy nhiên với những đặc điểm khác như camera, màn hình, công nghệ 5G hay cấu hình này, điện thoại này cũng sẽ đem lại những trải nghiệm tốt cho người dùng điện thoại phân khúc tầm trung.";
       const product = item;
       const singleItem = {
         //...item,
