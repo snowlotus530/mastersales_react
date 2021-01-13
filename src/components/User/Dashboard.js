@@ -25,18 +25,9 @@ import Orders from "./OrderDetails";
 import { UserConsumer } from "../../userContext";
 import Title from "./Title";
 import ListOrder from "./ListOrder";
+import FooterArea from "../FooterArea";
 import Account from "./Account";
 import Contact from "./Contact";
-
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {"Copyright © "}
-      <Link to="/">MasterSales</Link> {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
 
 const drawerWidth = 240;
 
@@ -131,49 +122,49 @@ export default function Dashboard() {
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   return (
-    <div className={classes.root}>
-      <CssBaseline />
-      <Drawer
-        variant="permanent"
-        classes={{
-          paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
-        }}
-        open={open}
-      >
-        <div className={classes.toolbarIcon}>
-          <IconButton onClick={handleDrawerClose}>
-            <MenuIcon />
-          </IconButton>
-        </div>
-        <Divider />
-        <List>{mainListItems}</List>
-        <Divider />
-        <List>{secondaryListItems}</List>
-      </Drawer>
-      <main className={classes.content}>
-        <Container maxWidth="lg" className={classes.container}>
-          <UserConsumer>
-            {(value) => {
-              return (
-                <Switch>
-                  <Route exact path="/dashboard">
-                    <ListOrder value={value} />
-                  </Route>
-                  <Route path="/dashboard/customer">
-                    <Account value={value} />
-                  </Route>
-                  <Route path="/dashboard/contact">
-                    <Contact value={value} />
-                  </Route>
-                </Switch>
-              );
-            }}
-          </UserConsumer>
-        </Container>
-        <Box pt={4}>
-          <Copyright />
-        </Box>
-      </main>
+    <div>
+      <div className={classes.root}>
+        <CssBaseline />
+        <Drawer
+          variant="permanent"
+          classes={{
+            paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
+          }}
+          open={open}
+        >
+          <div className={classes.toolbarIcon}>
+            <IconButton onClick={handleDrawerClose}>
+              <MenuIcon />
+            </IconButton>
+          </div>
+          <Divider />
+          <List>{mainListItems}</List>
+          <Divider />
+          <List>{secondaryListItems}</List>
+        </Drawer>
+        <main className={classes.content}>
+          <Container maxWidth="lg" className={classes.container}>
+            <UserConsumer>
+              {(value) => {
+                return (
+                  <Switch>
+                    <Route exact path="/dashboard">
+                      <ListOrder value={value} />
+                    </Route>
+                    <Route path="/dashboard/customer">
+                      <Account value={value} />
+                    </Route>
+                    <Route path="/dashboard/contact">
+                      <Contact value={value} />
+                    </Route>
+                  </Switch>
+                );
+              }}
+            </UserConsumer>
+          </Container>
+        </main>
+      </div>
+      <FooterArea />
     </div>
   );
 }

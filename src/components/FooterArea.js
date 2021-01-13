@@ -27,39 +27,59 @@ const FooterArea = () => {
                     <h5 className="title">VỀ CHÚNG TÔI</h5>
                     <br />
                     <p>
-                      <a style={{color: 'inherit'}} href="#!">Giới thiệu</a>
+                      <a style={{ color: "inherit" }} href="#!">
+                        Giới thiệu
+                      </a>
                     </p>
                     <p>
-                      <a style={{color: 'inherit'}} href="#!">Điều khoản dịch vụ</a>
+                      <a style={{ color: "inherit" }} href="#!">
+                        Điều khoản dịch vụ
+                      </a>
                     </p>
                     <p>
-                      <a style={{color: 'inherit'}} href="#!">Phương thức giao hàng</a>
+                      <a style={{ color: "inherit" }} href="#!">
+                        Phương thức giao hàng
+                      </a>
                     </p>
                   </div>
                   <div>
                     <h5 className="title">HỖ TRỢ</h5>
                     <br />
                     <p>
-                      <a style={{color: 'inherit'}} href="#!">Đặt câu hỏi</a>
+                      <a style={{ color: "inherit" }} href="#!">
+                        Đặt câu hỏi
+                      </a>
                     </p>
                     <p>
-                      <a style={{color: 'inherit'}} href="#!">Hướng dẫn mua hàng</a>
+                      <a style={{ color: "inherit" }} href="#!">
+                        Hướng dẫn mua hàng
+                      </a>
                     </p>
                     <p>
-                      <a style={{color: 'inherit'}} href="#!">Câu hỏi thường gặp</a>
+                      <a style={{ color: "inherit" }} href="#!">
+                        Câu hỏi thường gặp
+                      </a>
                     </p>
                   </div>
                   <div>
-                    <h5 style={{color: 'inherit'}} className="title">LIÊN HỆ</h5>
+                    <h5 style={{ color: "inherit" }} className="title">
+                      LIÊN HỆ
+                    </h5>
                     <br />
                     <p>
-                      <a style={{color: 'inherit'}} href="#!">Điện thoại: 01234565</a>
+                      <a style={{ color: "inherit" }} href="#!">
+                        Điện thoại: 01234565
+                      </a>
                     </p>
                     <p>
-                      <a style={{color: 'inherit'}} href="#!">Email: ms123@gm.com</a>
+                      <a style={{ color: "inherit" }} href="#!">
+                        Email: ms123@gm.com
+                      </a>
                     </p>
                     <p>
-                      <a style={{color: 'inherit'}} href="#!">Làm việc 24h</a>
+                      <a style={{ color: "inherit" }} href="#!">
+                        Làm việc 24h
+                      </a>
                     </p>
                   </div>
                 </div>

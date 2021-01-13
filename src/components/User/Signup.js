@@ -259,6 +259,7 @@ export default function SignUp(props) {
                         }
                         label="Tôi đồng ý với những điều khoản và dịch vụ"
                       />
+                      <a href="https://hotro.tiki.vn/hc/vi/articles/201971214">Đọc</a>
                       {errors.agree && (
                         <FormHelperText style={{ color: "red" }}>
                           {errors.agree}

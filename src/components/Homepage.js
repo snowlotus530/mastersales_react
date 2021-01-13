@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import ScrollTop from "react-scroll-to-top";
 import ProductList from "./ProductList";
 
 import { useToasts } from "react-toast-notifications";
@@ -12,6 +13,7 @@ export default function Homepage(props) {
     <React.Fragment>
       <Main className="py-3">
         <div className="container">
+          <ScrollTop color="blue" smooth={true} />
           <CarouselList />
           <ProductList />
         </div>
