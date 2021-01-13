@@ -133,7 +133,7 @@ export default function Contact(props) {
                   </Button>
                 </Grid>
                 <Grid item xs={12} sm={3}>
-                  <Button onClick={() => alert("this is")}>Sửa</Button>
+                  {/* <Button onClick={() => alert("this is")}>Sửa</Button> */}
                 </Grid>
               </Grid>
               <Title>Bảng tư vấn</Title>
